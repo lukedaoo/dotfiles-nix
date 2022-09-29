@@ -91,23 +91,11 @@ if [[ $PLATFORM == "linux" ]]; then
 	echo "Run after scripts for linux"
 	$AFTER_SCRIPT_DIR/install_suckless.sh
 	$AFTER_SCRIPT_DIR/zsh/setup_linux_config.sh
+	$AFTER_SCRIPT_DIR/setup_wallpaper.sh
 fi
 
 $AFTER_SCRIPT_DIR/setup_dotfiles.sh
-$AFTER_SCRIPT_DIR/setup_wallpaper.sh
 
 
 # --- Might be not working
 $AFTER_SCRIPT_DIR/zsh/export_deps.sh
-
-
-
-
-
-
-
-
-
-
-
-
