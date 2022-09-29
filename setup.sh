@@ -55,8 +55,15 @@ chmod +x "$AFTER_SCRIPT_DIR/install_suckless.sh"
 chmod +x "$AFTER_SCRIPT_DIR/install_p10k.sh"
 chmod +x "$AFTER_SCRIPT_DIR/setup_dotfiles.sh"
 chmod +x "$AFTER_SCRIPT_DIR/zsh/setup_default_zsh_config.sh"
-chmod +x "$AFTER_SCRIPT_DIR/zsh/setup_linux_config.sh"
+chmod +x "$AFTER_SCRIPT_DIR/zsh/export_deps.sh"
 chmod +x "$AFTER_SCRIPT_DIR/setup_wallpaper.sh"
+
+if [[ "$PLATFORM" == "linux" ]]; then
+    chmod +x "$AFTER_SCRIPT_DIR/zsh/setup_linux_config.sh"
+    chmod +x "$AFTER_SCRIPT_DIR/linux/statusbar/bat.sh"
+    chmod +x "$AFTER_SCRIPT_DIR/linux/statusbar/network.sh"
+    chmod +x "$AFTER_SCRIPT_DIR/linux/statusbar/vol.sh"
+fi
 
 $INIT_SCRIPT_DIR/setup_direction.sh
 INSTALL_COMMAND="$($INIT_SCRIPT_DIR/get_install_command.sh $PLATFORM $DISTRO)"
@@ -88,6 +95,10 @@ fi
 
 $AFTER_SCRIPT_DIR/setup_dotfiles.sh
 $AFTER_SCRIPT_DIR/setup_wallpaper.sh
+
+
+# --- Might be not working
+$AFTER_SCRIPT_DIR/zsh/export_deps.sh
 
 
 
