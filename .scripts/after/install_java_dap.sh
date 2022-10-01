@@ -72,12 +72,12 @@ build_vscode_java_test() {
 run() {
     build_java_debug 
     build_vscode_java_test
-   
+
     java_folder="$DESTINATION_FOLDER/$JAVA_DEBUG"
     java_debug_target_file=$java_folder/$JAVA_DEBUG_TARGET_FILE
     check_result_after_build $JAVA_DEBUG $java_debug_target_file
    
-    vscode_java_test_folder="$DESTINATION_FOLDER/$JAVA_DEBUG"
+    vscode_java_test_folder="$DESTINATION_FOLDER/$VSCODE_JAVA_TEST"
     vscode_java_test_target_file=$vscode_java_test_folder/$VSCODE_JAVA_TARGET_FILE
     check_result_after_build $VSCODE_JAVA_TEST $vscode_java_test_target_file
 }
