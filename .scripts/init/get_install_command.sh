@@ -7,6 +7,11 @@ run() {
 			echo "sudo apt install ";
 			return;
 		fi
+		if [[ $distro == "arch" ]]; then
+			echo "sudo pacman -S ";
+			return;
+		fi
+
 	elif [[ $platform == "macos" ]]; then 
 		echo "brew install ";
 		return;
