@@ -1,7 +1,7 @@
 #!/bin/bash
 
-DEPENDENCIES=("git" "neovim" "zsh" "python" "curl" "zip")
-LINUX_DEPENDENCIES=("xorg" "arandr" "alsa-utils" "feh" "ripgrep" "dmenu" "wireless-tool")
+DEPENDENCIES=("git" "neovim" "zsh" "python" "curl" "zip" "unzip")
+LINUX_DEPENDENCIES=("xorg" "arandr" "alsa-utils" "feh" "ripgrep" "dmenu" "wireless-tool" "pulseaudio")
 MACOS_DEPENDENCIES=()
 install_dep() {
 

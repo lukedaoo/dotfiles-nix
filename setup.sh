@@ -1,8 +1,5 @@
 #!/bin/bash
 
-
-
-
 PLATFORM="unknown";
 
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
@@ -47,7 +44,7 @@ fi
 # Chmod scripts
 INIT_SCRIPT_DIR="$HOME/.scripts/init"
 
-chmod +x "$INIT_SCRIPT_DIR/setup_direction.sh"
+chmod +x "$INIT_SCRIPT_DIR/setup_dir.sh"
 chmod +x "$INIT_SCRIPT_DIR/get_install_command.sh"
 chmod +x "$INIT_SCRIPT_DIR/install_x_window_system.sh"
 chmod +x "$INIT_SCRIPT_DIR/install_dependencies.sh"
@@ -68,7 +65,7 @@ if [[ "$PLATFORM" == "linux" ]]; then
     chmod +x "$AFTER_SCRIPT_DIR/linux/statusbar/vol.sh"
 fi
 
-$INIT_SCRIPT_DIR/setup_direction.sh
+$INIT_SCRIPT_DIR/setup_dir.sh
 INSTALL_COMMAND="$($INIT_SCRIPT_DIR/get_install_command.sh $PLATFORM $DISTRO)"
 
 if [[ $INSTALL_COMMAND == "unknown" ]]; then 

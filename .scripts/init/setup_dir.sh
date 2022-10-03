@@ -4,6 +4,7 @@ DEFAULT_OPT_DIR="$HOME/.local/share"
 DEFAULT_RUNTIME_LIB_DIR="$HOME/.runtime-lib"
 DEFAULT_WORKSPACE_DIR="$HOME/Work"
 DEFAULT_WALLPAPER_DIR="$HOME/.wallpaper"
+DEFAULT_TRASH_DIR=$HOME/.trash
 
 createIfNotExist() {
 
@@ -30,11 +31,16 @@ createWallpaperDir() {
 	createIfNotExist $DEFAULT_WALLPAPER_DIR
 }
 
+createTrashDir() {
+    createIfNotExist $DEFAULT_TRASH_DIR
+}
+
 run() {
 	createOptDir
 	createRuntimeLibDir
 	createWorkspaceDir
 	createWallpaperDir
+    createTrashDir
 }
 
 run
