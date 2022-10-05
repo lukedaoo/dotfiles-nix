@@ -1,6 +1,6 @@
 #!/bin/bash
 
-ZSH_FILES=(".zshrc" ".zshrc-config" ".zshrc-env" ".zshrc-deps" ".zshrc-alias" ".zshrc-func")
+ZSH_FILES=(".zshrc" ".zshrc-config" ".zshrc-env" ".zshrc-deps" ".zshrc-alias" ".zshrc-func" ".zshrc-deps-conda" ".zshrc-conda")
 ZSH_FILES_BK_FOLDER="$HOME/.zsh_bk"
 timestamp() {
 	date +%s%N | cut -b1-13
@@ -47,8 +47,30 @@ if [ -f ~/.zshrc-func ]; then
     source ~/.zshrc-func
 fi
 "
+ZSHRC_CONDA_DEFAULT_CONTENT="
+if [ -f ~/.zshrc-config ]; then
+    source ~/.zshrc-config
+fi
+
+if [ -f ~/.zshrc-env ]; then
+    source ~/.zshrc-env
+fi
+
+if [ -f ~/.zshrc-deps ]; then
+    source ~/.zshrc-deps-conda
+fi
+
+if [ -f ~/.zshrc-alias ]; then
+    source ~/.zshrc-alias
+fi
+
+if [ -f ~/.zshrc-func ]; then
+    source ~/.zshrc-func
+fi
+"
 
 echo "$ZSHRC_DEFAULT_CONTENT" >> ${HOME}/${ZSH_FILES[0]}
+echo "$ZSHRC_CONDA_DEFAULT_CONTENT" >> ${HOME}/${ZSH_FILES[7]}
 
 ZSHRC_CONFIG_DEFAULT_CONTENT="
 autoload -U compinit; compinit
@@ -73,6 +95,7 @@ echo "$ZSHRC_ENV_DEFAULT_CONTENT" >> ${HOME}/${ZSH_FILES[2]}
 ZSHRC_DEPS_DEFAULT_CONTENT="
 "
 echo "$ZSHRC_DEPS_DEFAULT_CONTENT" >> ${HOME}/${ZSH_FILES[3]}
+echo "$ZSHRC_DEPS_DEFAULT_CONTENT" >> ${HOME}/${ZSH_FILES[6]}
 
 
 ZSHRC_ALIAS_DEFAULT_CONTENT="
@@ -106,6 +129,8 @@ alias ls='ls -G'
 alias la='ls -AF'       
 alias ll='ls -al'
 alias l1='ls -1'
+
+alias enable_conda='source ~/.zshrc-conda'
 "
 echo "$ZSHRC_ALIAS_DEFAULT_CONTENT" >> ${HOME}/${ZSH_FILES[4]}
 

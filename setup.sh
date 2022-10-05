@@ -51,18 +51,18 @@ chmod +x "$INIT_SCRIPT_DIR/install_dependencies.sh"
 
 AFTER_SCRIPT_DIR="$HOME/.scripts/after"
 chmod +x "$AFTER_SCRIPT_DIR/install_fonts.sh"
-chmod +x "$AFTER_SCRIPT_DIR/install_suckless.sh"
 chmod +x "$AFTER_SCRIPT_DIR/install_p10k.sh"
 chmod +x "$AFTER_SCRIPT_DIR/setup_dotfiles.sh"
 chmod +x "$AFTER_SCRIPT_DIR/zsh/setup_default_zsh_config.sh"
 chmod +x "$AFTER_SCRIPT_DIR/zsh/export_deps.sh"
-chmod +x "$AFTER_SCRIPT_DIR/setup_wallpaper.sh"
 
 if [[ "$PLATFORM" == "linux" ]]; then
     chmod +x "$AFTER_SCRIPT_DIR/zsh/setup_linux_config.sh"
+    chmod +x "$AFTER_SCRIPT_DIR/linux/install_suckless.sh"
     chmod +x "$AFTER_SCRIPT_DIR/linux/statusbar/bat.sh"
     chmod +x "$AFTER_SCRIPT_DIR/linux/statusbar/network.sh"
     chmod +x "$AFTER_SCRIPT_DIR/linux/statusbar/vol.sh"
+    chmod +x "$AFTER_SCRIPT_DIR/linux/setup_wallpaper.sh"
 fi
 
 $INIT_SCRIPT_DIR/setup_dir.sh
@@ -89,9 +89,9 @@ $AFTER_SCRIPT_DIR/install_p10k.sh
 
 if [[ $PLATFORM == "linux" ]]; then
 	echo "Run after scripts for linux"
-	$AFTER_SCRIPT_DIR/install_suckless.sh
+	$AFTER_SCRIPT_DIR/linux/install_suckless.sh
 	$AFTER_SCRIPT_DIR/zsh/setup_linux_config.sh
-	$AFTER_SCRIPT_DIR/setup_wallpaper.sh
+	$AFTER_SCRIPT_DIR/linux/setup_wallpaper.sh
 fi
 
 $AFTER_SCRIPT_DIR/setup_dotfiles.sh
