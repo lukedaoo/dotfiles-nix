@@ -1,5 +1,5 @@
 #!/bin/bash
-
+######################## xXx #######################
 PLATFORM="unknown";
 
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
