@@ -96,6 +96,5 @@ fi
 
 $AFTER_SCRIPT_DIR/setup_dotfiles.sh
 
-
 # --- Might be not working
 $AFTER_SCRIPT_DIR/zsh/export_deps.sh
