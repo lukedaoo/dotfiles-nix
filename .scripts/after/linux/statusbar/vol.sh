@@ -7,5 +7,5 @@ then
     volume_icon="婢"
     volume_value="MUTED"
 fi
-echo $volume_icon $volume_value
+echo "$volume_value"
 

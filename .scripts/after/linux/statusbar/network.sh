@@ -2,11 +2,12 @@
 tool_path="/usr/sbin/iwgetid"
 ssid=$($tool_path -r)
 
+char="直  睊"
 
 if [[ $ssid != "" ]]
 then
-    echo 直 $ssid
+    echo $ssid
 else
-    echo "睊 Not Connected"
+    echo "Not Connected"
 fi
 

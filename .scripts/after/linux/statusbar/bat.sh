@@ -22,4 +22,4 @@ if [ $batcharge = "Unknown" ]
 then
     batcharge="Limiting"
 fi
-echo -e "$baticon $batstat% $batcharge"
+echo -e "$batstat% $batcharge"
