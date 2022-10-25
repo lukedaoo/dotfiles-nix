@@ -1,0 +1,25 @@
+#!/bin/bash
+
+batstat=$(cat /sys/class/power_supply/BAT0/capacity) 
+batcharge=$(cat /sys/class/power_supply/BAT0/status) 
+if [ $batcharge = "Charging" ] || [ $batcharge = "Unknown" ] 
+then
+    baticon=
+elif [[ $batstat -ge 90 ]]
+then
+    baticon=
+elif [[ $batstat -ge 50 ]]
+then
+        baticon=
+elif [[ $batstat -ge 30 ]]
+then
+    baticon=
+else
+    baticon=
+fi
+
+if [ $batcharge = "Unknown" ]
+then
+    batcharge="Limiting"
+fi
+echo -e "$batstat% $batcharge"
