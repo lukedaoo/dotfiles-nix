@@ -1,0 +1,10 @@
+#!/bin/sh
+case $BUTTON in
+	1) notify-send "  Top 10 RAM usage process" "$(ps axc -eo pid,comm,%mem --sort=-%mem | head -10)" ;;
+	2) setsid -f "kitty" -e htop ;;
+	6) "kitty" -e "code" "$0" ;;
+esac
+
+data=$(free -t | awk 'FNR == 2 {printf("%.2f%"), $3/$2*100}')
+
+echo "Ram: $data"

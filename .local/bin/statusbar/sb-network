@@ -1,0 +1,29 @@
+#!/bin/sh
+case $BUTTON in
+	1) setsid -f "kitty" -e nmtui ;;
+esac
+tool_path="/usr/sbin/iwgetid"
+ssid=$($tool_path -r)
+
+char="直  睊"
+device_off_icon="睊"
+
+status=""
+
+if [[ $ssid != "" ]]
+then
+    status=$ssid
+fi
+
+if [[ $ssid == "" ]]
+then
+    interface=$($tool_path)
+    if [[ $interface == "" ]] ;
+    then
+        status="Wifi Disabled"
+    else
+        status="Not Connected"
+    fi
+fi
+
+echo $status

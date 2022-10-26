@@ -1,0 +1,8 @@
+#!/bin/sh
+case $BUTTON in
+	2) notify-send " Right click to lock" ;;
+	3) physlock ;;
+	6) "kitty" -e "code" "$0" ;;
+esac
+
+whoami

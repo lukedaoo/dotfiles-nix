@@ -78,6 +78,10 @@ export HISTFILE='$HOME/.zhistory'
 export HISTSIZE=1000                  
 export SAVEHIST=1000                   
 setopt SHARE_HISTORY
+
+# Default programs:
+export EDITOR='nvim'
+export TERMINAL='kitty'
 "
 
 echo "$ZSHRC_CONFIG_DEFAULT_CONTENT" >> ${HOME}/${ZSH_FILES[1]}
@@ -183,3 +187,18 @@ make_clean_install() {
 
 "
 echo "$ZSHRC_FUNC_DEFAULT_CONTENT" >> ${HOME}/${ZSH_FILES[5]}
+
+# set_path(){
+#     for i in "$@";
+#     do
+#         # Check if the directory exists
+#         [ -d "$i" ] || continue
+#         # Check if it is not already in your $PATH.
+#         echo "$PATH" | grep -Eq "(^|:)$i(:|$)" && continue
+#
+#         # Then append it to $PATH and export it 
+#         export PATH="${PATH}:$i"
+#     done
+# }
+#
+# set_path /usr/bin /usr/sbin /usr/local/bin /usr/local/sbin ~/.local/bin/statusbar
