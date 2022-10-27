@@ -1,6 +1,6 @@
 #!/bin/sh
 case $BUTTON in
-	1) setsid -f "kitty" -e nmtui ;;
+	3) setsid -f "kitty" -e nmtui ;;
 esac
 tool_path="/usr/sbin/iwgetid"
 ssid=$($tool_path -r)
