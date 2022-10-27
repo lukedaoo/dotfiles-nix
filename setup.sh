@@ -57,6 +57,7 @@ chmod +x "$AFTER_SCRIPT_DIR/zsh/setup_default_zsh_config.sh"
 chmod +x "$AFTER_SCRIPT_DIR/zsh/export_deps.sh"
 
 if [[ "$PLATFORM" == "linux" ]]; then
+    chmod +x "$INIT_SCRIPT_DIR/install_typing_method.sh"
     chmod +x "$AFTER_SCRIPT_DIR/zsh/setup_linux_config.sh"
     chmod +x "$AFTER_SCRIPT_DIR/linux/install_suckless.sh"
     chmod +x "$AFTER_SCRIPT_DIR/linux/statusbar/bat.sh"
@@ -76,6 +77,7 @@ fi
 echo "Install dependencies ..."
 if [[ "$PLATFORM" == "linux" ]]; then
 	$INIT_SCRIPT_DIR/install_x_window_system.sh $INSTALL_COMMAND
+    $INIT_SCRIPT_DIR/install_typing_method.sh $INSTALL_COMMAND
 fi
 
 $INIT_SCRIPT_DIR/install_dependencies.sh $PLATFORM "$(echo $INSTALL_COMMAND)" 
@@ -90,6 +92,7 @@ $AFTER_SCRIPT_DIR/install_p10k.sh
 if [[ $PLATFORM == "linux" ]]; then
 	echo "Run after scripts for linux"
 	$AFTER_SCRIPT_DIR/linux/install_suckless.sh
+    $AFTER_SCRIPT_DIR/linux/export_option_env.sh
 	$AFTER_SCRIPT_DIR/zsh/setup_linux_config.sh
 	$AFTER_SCRIPT_DIR/linux/setup_wallpaper.sh
 fi

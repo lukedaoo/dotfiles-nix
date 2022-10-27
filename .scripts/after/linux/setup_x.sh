@@ -23,6 +23,9 @@ _echo "setxkbmap -option caps:escape"
 comment "increase repeat key time"
 _echo "xset r rate 200 65"
 
+comment "start typing method system"
+_echo "fcitx5 &"
+
 comment "start layout"
 _echo "if [ -f ~/.screenlayout/default.sh ] ; then"
 _echo "  ~/.screenlayout/default.sh"
