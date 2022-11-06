@@ -1,0 +1,4 @@
+
+setxkbmap -option caps:escape
+xset r rate 200 65
+

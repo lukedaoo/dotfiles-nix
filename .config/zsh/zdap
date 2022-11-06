@@ -1,0 +1,28 @@
+# Function to source files if they exist
+function z_source() {
+    [ -f "$HOME/.config/zsh/$1" ] && source "$HOME/.config/zsh/$1"
+}
+
+function z_plug() {
+    PLUGIN_NAME=$(echo $1 | cut -d "/" -f 2)
+    if [ -d "$HOME/.config/zsh/plugins/$PLUGIN_NAME" ]; then 
+        # For plugins
+        z_source "plugins/$PLUGIN_NAME/$PLUGIN_NAME.plugin.zsh" || \
+        z_source "plugins/$PLUGIN_NAME/$PLUGIN_NAME.zsh"
+    else
+        git clone "https://github.com/$1.git" "$HOME/.config/zsh/plugins/$PLUGIN_NAME"
+    fi
+}
+function z_cmp() {
+    PLUGIN_NAME=$(echo $1 | cut -d "/" -f 2)
+    if [ ! -d "$HOME/.config/zsh/plugins/$PLUGIN_NAME" ]; then
+        git clone "https://github.com/$1.git" "$HOME/.config/zsh/plugins/$PLUGIN_NAME"
+        fpath+=$(ls $HOME/.config/zsh/plugins/$PLUGIN_NAME/_*)
+        [ -f $HOME/.config/zsh/.zccompdump ] && $HOME/.config/zsh/.zccompdump
+    fi
+    completion_file_path=$(ls $HOME/.config/zsh/plugins/$PLUGIN_NAME/_*)
+    fpath+="$(dirname "${completion_file_path}")"
+    z_source $HOME/.config/zsh/plugins/$PLUGIN_NAME/$PLUGIN_NAME.plugin.zsh
+    completion_file="$(basename "${completion_file_path}")"
+    [ "$2" = true ] && compinit "${completion_file:1}"
+}

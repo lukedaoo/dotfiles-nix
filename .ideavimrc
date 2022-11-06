@@ -1,0 +1,47 @@
+"" Source your .vimrc
+source ~/.vimrc
+let mapleader = " " " map leader to space
+
+set visualbell
+set noerrorbells
+set clipboard+=unnamed
+set clipboard+=ideaput
+set splitright
+set splitbelow
+set NERDTree
+
+noremap <Up> <Nop>
+noremap <Down> <Nop>
+noremap <Left> <Nop>
+noremap <Right> <Nop>
+
+nnoremap <C-J> <C-W><C-J>
+nnoremap <C-K> <C-W><C-K>
+nnoremap <C-L> <C-W><C-L>
+nnoremap <C-H> <C-W><C-H>
+
+inoremap jj <ESC>
+inoremap jk <ESC>
+
+" nnoremap <C-Left> gt
+" nnoremap <C-Right> gT
+
+nnoremap <leader>sq :close<CR>
+nnoremap <leader>sh :sp<CR>
+nnoremap <leader>] :vsp<CR>
+nnoremap <leader>sv :vsp<CR>
+nnoremap <leader>ff :action SearchEverywhere<CR>
+nnoremap <C-A> ggVG
+nnoremap <leader>tt :action ActivateTerminalToolWindow<CR>
+
+vnoremap K :action MoveLineUp<CR>
+vnoremap J :action MoveLineDown<CR>
+
+noremap <leader>e :NERDTreeToggle<CR>
+
+nnoremap H ^
+vnoremap H ^
+nnoremap L $
+vnoremap L $
+nnoremap gi :action GotoImplementation<CR>
+nnoremap <C-I> :action Back<CR>
