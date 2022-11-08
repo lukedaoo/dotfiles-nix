@@ -6,6 +6,7 @@ export SAVEHIST=10000                   # Maximum events in history file
 
 export EDITOR="nvim"
 export VISUAL="nvim"
+export TERMINAL="kitty"
 
 #  ff
 export WALLPAPER_DIR="$HOME/.wallpaper"

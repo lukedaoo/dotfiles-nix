@@ -1,28 +1,38 @@
+#!/bin/sh
 # Function to source files if they exist
 function z_source() {
     [ -f "$HOME/.config/zsh/$1" ] && source "$HOME/.config/zsh/$1"
 }
 
 function z_plug() {
-    PLUGIN_NAME=$(echo $1 | cut -d "/" -f 2)
-    if [ -d "$HOME/.config/zsh/plugins/$PLUGIN_NAME" ]; then 
-        # For plugins
-        z_source "plugins/$PLUGIN_NAME/$PLUGIN_NAME.plugin.zsh" || \
-        z_source "plugins/$PLUGIN_NAME/$PLUGIN_NAME.zsh"
-    else
-        git clone "https://github.com/$1.git" "$HOME/.config/zsh/plugins/$PLUGIN_NAME"
+    local full_plugin_name="$1"
+    local plugin_name=$(echo "$full_plugin_name" | cut -d "/" -f 2)
+    ZAP_PLUGIN_DIR=$ZDOTDIR/plugins
+    if [ ! -d "$ZAP_PLUGIN_DIR/$plugin_name" ]; then
+      echo "Installing $plugin_name ..." && git clone "https://github.com/${full_plugin_name}.git" \
+        "$ZAP_PLUGIN_DIR/$plugin_name" > /dev/null 2>&1 && echo " $plugin_name " || echo "Failed to install : $plugin_name"
     fi
+    source "$ZAP_PLUGIN_DIR/$plugin_name/$plugin_name.plugin.zsh" || \
+    source "$ZAP_PLUGIN_DIR/$plugin_name/$plugin_name.zsh" || \
+    source "$ZAP_PLUGIN_DIR/$plugin_name/$plugin_name.zsh-theme"
 }
 function z_cmp() {
-    PLUGIN_NAME=$(echo $1 | cut -d "/" -f 2)
-    if [ ! -d "$HOME/.config/zsh/plugins/$PLUGIN_NAME" ]; then
-        git clone "https://github.com/$1.git" "$HOME/.config/zsh/plugins/$PLUGIN_NAME"
-        fpath+=$(ls $HOME/.config/zsh/plugins/$PLUGIN_NAME/_*)
-        [ -f $HOME/.config/zsh/.zccompdump ] && $HOME/.config/zsh/.zccompdump
+    ZAP_PLUGIN_DIR=$ZDOTDIR/plugins
+    local full_plugin_name="$1"
+    local initialize_completion="$2"
+    local plugin_name=$(echo "$full_plugin_name" | cut -d "/" -f 2)
+    if [ ! -d "$ZAP_PLUGIN_DIR/$plugin_name" ]; then
+        git clone "https://github.com/${full_plugin_name}.git" "$ZAP_PLUGIN_DIR/$plugin_name" \
+          > /dev/null 2>&1 && echo " $plugin_name " || echo "Failed to install : $plugin_name"
+        fpath+=$(ls $ZAP_PLUGIN_DIR/$plugin_name/_*)
+        [ -f $ZAP_DIR/.zccompdump ] && $ZAP_DIR/.zccompdump
     fi
-    completion_file_path=$(ls $HOME/.config/zsh/plugins/$PLUGIN_NAME/_*)
+    local completion_file_path=$(ls $ZAP_PLUGIN_DIR/$plugin_name/_*)
+    if [[ $completion_file_path = "" ]]; then
+        completion_file_path=$(ls $ZAP_PLUGIN_DIR/$plugin_name/src/_*)
+    fi
     fpath+="$(dirname "${completion_file_path}")"
-    z_source $HOME/.config/zsh/plugins/$PLUGIN_NAME/$PLUGIN_NAME.plugin.zsh
-    completion_file="$(basename "${completion_file_path}")"
-    [ "$2" = true ] && compinit "${completion_file:1}"
+    z_source $ZAP_PLUGIN_DIR/$plugin_name/$plugin_name.plugin.zsh
+    local completion_file="$(basename "${completion_file_path}")"
+    [ "$initialize_completion" = true ] && compinit "${completion_file:1}"
 }

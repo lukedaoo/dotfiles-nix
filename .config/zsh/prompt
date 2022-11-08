@@ -36,7 +36,7 @@ NO_COLOUR="%{$reset_color%}"
 NEWLINE=$'\n'
 zstyle ':vcs_info:*' check-for-changes true
 # zstyle ':vcs_info:git:*' formats " %r/%S %b %m%u%c "
-zstyle ':vcs_info:git:*' formats "$BLUE($RED%m%u%c%$YELLOW$MAGNETA %b%$BLUE)"
+zstyle ':vcs_info:git:*' formats "$BLUE($RED%m%u%c% $YELLOW $MAGNETA %b%$BLUE)"
 
 # format our main prompt for hostname current folder, and permissions.
 
