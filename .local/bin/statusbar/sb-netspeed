@@ -19,6 +19,6 @@ update() {
 rx=$(update /sys/class/net/[ew]*/statistics/rx_bytes)
 tx=$(update /sys/class/net/[ew]*/statistics/tx_bytes)
 
-printf "%2sB %2sB\\n" $(numfmt --to=iec $rx) $(numfmt --to=iec $tx)
+printf " %2sB  %2sB\\n" $(numfmt --to=iec $rx) $(numfmt --to=iec $tx)
 #printf "[%4sB] \\n" $(numfmt --to=iec $rx)
 

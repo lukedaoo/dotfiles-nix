@@ -3,6 +3,12 @@
 bluetooth_icon=""
 no_bluetooth_interface=""
 
+is_active=$(systemctl is-active bluetooth)
+if [[ $is_active == "inactive" ]]; then
+    status="Bluetooth Disabled"
+    echo $status 
+    exit
+fi
 interface_status=$(bluetoothctl list)
 status=""
 good_to_use_button="no"

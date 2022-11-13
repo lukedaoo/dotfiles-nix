@@ -1,8 +1,5 @@
 #!/bin/sh
 
-# Show wifi 📶 and percent strength or 📡 if none.
-# Show 🌐 if connected to ethernet or ❎ if none.
-# Show 🔒 if a vpn connection is active
 case $BUTTON in
 	3) "kitty" -e nmtui; pkill -RTMIN+4 dwmblocks ;;
 	2) notify-send "🌐 Internet module" "\- Click to connect

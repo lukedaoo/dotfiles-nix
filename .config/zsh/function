@@ -1,3 +1,4 @@
+#!/bin/sh
 
 generatePassword() {
     if [ $1 ] ; then
@@ -45,4 +46,19 @@ make_clean_install() {
 	sudo make clean install
 }
 
+ip4() {
+    curl -4 ifconfig.co
+}
 
+ip6() {
+    curl -6 ifconfig.co
+}
+
+remoteFxAws() {
+    ssh -i $HOME/Work/fxswap/fx-swap-deployment/config/FXSwap.pem ubuntu@54.255.137.50
+}
+
+
+killEmulator() {
+    adb devices | grep emulator | cut -f1 | while read line; do adb -s $line emu kill; done
+}

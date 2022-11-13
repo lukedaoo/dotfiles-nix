@@ -23,7 +23,3 @@ then
     batcharge="Limiting"
 fi
 echo -e "$batstat% $batcharge"
-
-
-
-
