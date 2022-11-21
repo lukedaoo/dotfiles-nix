@@ -5,6 +5,8 @@ cd()  { builtin cd $@; ls -G; }
 w() { cd ~/Work/$@ }
 
 weather() { curl wttr.in }
+
+clock() { tty-clock -s }
 ###
 
 
@@ -30,7 +32,7 @@ alias la='ls -AF'
 alias ll='ls -al'
 alias l1='ls -1'
 
-alias suckless='cd $CONFIG_DIR/suckless'
+alias suckless='cd $HOME/.config/suckless'
 alias config='/usr/bin/git --git-dir=/home/luked/.dotfiles/ --work-tree=/home/luked'
 
 alias enable_conda='source $HOME/.config/zsh/deps-conda'
