@@ -16,6 +16,7 @@ function z_plug() {
     source "$ZAP_PLUGIN_DIR/$plugin_name/$plugin_name.zsh" || \
     source "$ZAP_PLUGIN_DIR/$plugin_name/$plugin_name.zsh-theme"
 }
+
 function z_cmp() {
     ZAP_PLUGIN_DIR=$ZDOTDIR/plugins
     local full_plugin_name="$1"

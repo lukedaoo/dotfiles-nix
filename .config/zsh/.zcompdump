@@ -1,4 +1,4 @@
-#files: 945	version: 5.9
+#files: 951	version: 5.9
 
 _comps=(
 '-' '_precommand'
@@ -130,7 +130,6 @@ _comps=(
 'bunzip2' '_bzip2'
 'burst' '_mh'
 'busctl' '_busctl'
-'bwrap' '_bwrap'
 'bzcat' '_bzip2'
 'bzegrep' '_grep'
 'bzfgrep' '_grep'
@@ -144,6 +143,7 @@ _comps=(
 'cal' '_cal'
 'calendar' '_calendar'
 'cap' '_cap'
+'cargo' '_cargo'
 'cask' '_cask'
 'cat' '_cat'
 'catchsegv' '_precommand'
@@ -193,6 +193,7 @@ _comps=(
 'cmp' '_cmp'
 'co' '_rcs'
 'code' '_code'
+'code-oss' '_code-oss'
 'coffee' '_coffee'
 'column' '_column'
 'comb' '_sccs'
@@ -286,8 +287,6 @@ _comps=(
 'dmesg' '_dmesg'
 'dmidecode' '_dmidecode'
 'doas' '_doas'
-'docker' '_docker'
-'dockerd' '_docker'
 'docpad' '_docpad'
 'domainname' '_yp'
 'dos2unix' '_dos2unix'
@@ -714,7 +713,6 @@ _comps=(
 'killall5' '_killall'
 'kioclient' '_kfmclient'
 'kitchen' '_kitchen'
-'kitty' '_kitty'
 'knife' '_knife'
 'knock' '_knock'
 'konqueror' '_webbrowser'
@@ -923,6 +921,7 @@ _comps=(
 'nginx' '_nginx'
 'ngrep' '_ngrep'
 'nice' '_nice'
+'ninja' '_ninja'
 'nkf' '_nkf'
 'nl' '_nl'
 'nm' '_nm'
@@ -1111,6 +1110,7 @@ _comps=(
 'qdbus' '_qdbus'
 'qiv' '_qiv'
 'qmk' '_qmk'
+'qpdf' '_qpdf'
 'quilt' '_quilt'
 'r' '_fc'
 'rails' '_rails'
@@ -1191,6 +1191,7 @@ _comps=(
 'run-help' '_run-help'
 'rup' '_hosts'
 'rusage' '_precommand'
+'rustup' '_rustup'
 'rview' '_vim'
 'rvim' '_vim'
 'rwho' '_hosts'
@@ -1640,6 +1641,7 @@ _comps=(
 'ypxfr' '_yp'
 'ytalk' '_other_accounts'
 'zargs' '_zargs'
+'zathura' '_zathura'
 'zcalc' '_zcalc'
 '-zcalc-line-' '_zcalc_line'
 'zcash-cli' '_zcash-cli'
@@ -1674,6 +1676,7 @@ _comps=(
 'zmodload' '_zmodload'
 'zmv' '_zmv'
 'zone' '_hosts'
+'zoxide' '_zoxide'
 'zparseopts' '_zparseopts'
 'zpool' '_zfs'
 'zpty' '_zpty'
@@ -1839,14 +1842,15 @@ autoload -Uz _afew _android _archlinux-java _artisan _atach \
             _tox _udisksctl _ufw _vagrant _virtualbox \
             _vnstat _wemux _wg-quick _xinput _xsel \
             _yaourt _yarn _zcash-cli _bluetoothctl _bootctl \
-            _busctl _bwrap _coredumpctl _curl _docker \
-            _hostnamectl _journalctl _kernel-install _kitty _libinput \
+            _busctl _cargo _code _code-oss _coredumpctl \
+            _curl _hostnamectl _journalctl _kernel-install _libinput \
             _localectl _loginctl _machinectl _mkinitcpio _networkctl \
-            _oomctl _pacman _pulseaudio _resolvectl _rg \
-            _sd_hosts_or_user_at_host _sd_machines _sd_outputmodes _sd_unit_files _systemctl \
-            _systemd _systemd-analyze _systemd-delta _systemd-inhibit _systemd-nspawn \
-            _systemd-path _systemd-run _systemd-tmpfiles _timedatectl _udevadm \
-            _yay _cdr _all_labels _all_matches _alternative \
+            _ninja _oomctl _pacman _pulseaudio _qpdf \
+            _resolvectl _rg _rustup _sd_hosts_or_user_at_host _sd_machines \
+            _sd_outputmodes _sd_unit_files _systemctl _systemd _systemd-analyze \
+            _systemd-delta _systemd-inhibit _systemd-nspawn _systemd-path _systemd-run \
+            _systemd-tmpfiles _timedatectl _udevadm _yay _zathura \
+            _zoxide _cdr _all_labels _all_matches _alternative \
             _approximate _arg_compile _arguments _bash_completions _cache_invalid \
             _call_function _combination _complete _complete_debug _complete_help \
             _complete_help_generic _complete_tag _comp_locale _correct _correct_filename \

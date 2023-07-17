@@ -36,3 +36,4 @@ alias suckless='cd $HOME/.config/suckless'
 alias config='/usr/bin/git --git-dir=/home/luked/.dotfiles/ --work-tree=/home/luked'
 
 alias enable_conda='source $HOME/.config/zsh/deps-conda'
+alias configNvim='nvim ~/.config/nvim'
