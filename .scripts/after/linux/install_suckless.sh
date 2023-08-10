@@ -5,7 +5,7 @@ clone() {
 
 SUCKLESS_CONFIG_DIR="$HOME/.config/"
 SUCKLESS_GIT_REPO="https://git.suckless.org/"
-SUCKLESS_SOFTWARE=("dwm" "st" "slstatus" "dwmblocks-async")
+SUCKLESS_SOFTWARE=("dwm" "st" "slstatus" "dwmblocks")
 
 MY_SUCKLESS="https://github.com/lukedaoo/suckless"
 
