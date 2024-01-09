@@ -68,3 +68,14 @@ findProcess() {
     name=$1;
     pgrep $name;
 }
+
+open() {
+    file=$1
+    extension="${file##*.}"
+    filename="${file%.*}"
+    $BROWSER $file
+}
+
+x_func() {
+    $HOME/.scripts/after/linux/x_func.sh
+}
