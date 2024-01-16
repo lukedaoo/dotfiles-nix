@@ -53,29 +53,3 @@ ip4() {
 ip6() {
     curl -6 ifconfig.co
 }
-
-alias ssh="kitty +kitten ssh"
-remoteFxAws() {
-    ssh -i $HOME/Work/fxswap/fx-swap-deployment/config/FXSwap.pem ubuntu@54.255.137.50
-}
-
-
-killEmulator() {
-    adb devices | grep emulator | cut -f1 | while read line; do adb -s $line emu kill; done
-}
-
-findProcess() {
-    name=$1;
-    pgrep $name;
-}
-
-open() {
-    file=$1
-    extension="${file##*.}"
-    filename="${file%.*}"
-    $BROWSER $file
-}
-
-x_func() {
-    $HOME/.scripts/after/linux/x_func.sh
-}
