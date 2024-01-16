@@ -5,4 +5,4 @@ export HISTSIZE=10000                   # Maximum events for internal history
 export SAVEHIST=10000                   # Maximum events in history file
 
 [ -f "$HOME/.env" ] && source "$HOME/.env"
-[ -f "$HOME/.env" ] && source "$HOME/.serect"
+[ -f "$HOME/.env" ] && source "$HOME/.secret"
