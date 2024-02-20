@@ -1,0 +1,29 @@
+#!/bin/sh
+
+bluetooth_icon=""
+no_bluetooth_interface=""
+
+is_active=$(systemctl is-active bluetooth)
+if [[ $is_active == "inactive" ]]; then
+    status="Bluetooth Disabled"
+    echo $status 
+    exit
+fi
+interface_status=$(bluetoothctl list)
+status=""
+good_to_use_button="no"
+if [[ $interface_status == "" ]]; then
+    status="Bluetooth Disabled"
+else
+    status=$bluetooth_icon
+    good_to_use_button="yes"
+fi
+if [[ $good_to_use_button == "yes" ]]; then
+    case $BUTTON in
+        1) notify-send "  Pariable devices" "$(bluetoothctl devices | awk '{$1=$2=""; print $0}')" ;;
+        3) setsid -f "kitty" -e bluetuith ;;
+    esac
+fi
+
+echo $status
+
