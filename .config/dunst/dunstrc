@@ -1,0 +1,43 @@
+[global]
+    monitor = 0
+    follow = keyboard
+    width = 370
+    height = 350
+    offset = 0x19
+    padding = 2
+    horizontal_padding = 2
+    transparency = 25
+    font = Comic Mono 14
+    format = "<b>%s</b>\n%b"
+    frame_color = "#8AADF4"
+    separator_color= frame
+
+#[urgency_low]
+#    foreground = "#ffffff"
+#    background = "#0D1017"
+#    frame_color = "#7FD962"
+#    timeout = 3
+
+#[urgency_normal]
+#    foreground = "#ffffff"
+#    background = "#0D1017"
+#    frame_color = "#7FD962"
+#    timeout = 5
+
+#[urgency_critical]
+#    foreground = "#ffffff"
+#    background = "#0D1017"
+#    frame_color = "#F26D78"
+#    timeout = 10
+[urgency_low]
+background = "#24273A"
+foreground = "#CAD3F5"
+
+[urgency_normal]
+background = "#24273A"
+foreground = "#CAD3F5"
+
+[urgency_critical]
+background = "#24273A"
+foreground = "#CAD3F5"
+frame_color = "#F5A97F"

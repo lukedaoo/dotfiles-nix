@@ -1,0 +1,4 @@
+bindkey -v
+export KEYTIMEOUT=1
+bindkey -s '^e' 'ranger^M'
+bindkey -s '^o' '$EDITOR^M'

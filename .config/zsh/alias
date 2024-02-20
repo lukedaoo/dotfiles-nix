@@ -1,0 +1,33 @@
+
+### Simple function
+cd()  { builtin cd $@; ls -G; }
+
+w() { cd ~/Work/$@ }
+
+weather() { curl wttr.in }
+
+clock() { tty-clock -s }
+###
+
+
+alias e='exit'
+
+alias clean='reset'
+alias rs='clear'
+
+alias cd..='cd ../'
+alias ..='cd ../'
+alias ...='cd ../../'
+alias .3='cd ../../../'
+alias .4='cd ../../../../'
+alias .5='cd ../../../../../' 
+alias .6='cd ../../../../../../'
+alias ~='cd ~'
+
+alias dl='cd ~/Downloads'
+alias lib='cd ~/.runtime-lib'
+
+alias ls='ls -G'        
+alias la='ls -AF'       
+alias ll='ls -al'
+alias l1='ls -1'
