@@ -1,5 +1,5 @@
 #!/bin/sh
 case $BUTTON in
-    1) notify-send "This Month" "$(cal --color=always | sed "s/..7m/<b><span color=\"red\">/;s|..27m|</span></b>|")";;
+	1) notify-send "This Month" "$(cal | sed "s/\<$(date +'%e')\>/<b><span color='red'>&<\/span><\/b>/")" ;
 esac
 date "+%b %d (%a) %Y %I:%M:%S %p"
