@@ -3,7 +3,7 @@ clone() {
     git clone $1
 }
 
-SUCKLESS_CONFIG_DIR="$HOME/.config/"
+SUCKLESS_CONFIG_DIR="$HOME/.config"
 SUCKLESS_GIT_REPO="https://git.suckless.org/"
 SUCKLESS_SOFTWARE=("dwm" "st" "slstatus" "dwmblocks")
 

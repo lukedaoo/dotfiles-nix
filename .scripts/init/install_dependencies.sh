@@ -1,7 +1,11 @@
 #!/bin/bash
 
 DEPENDENCIES=("git" "neovim" "zsh" "curl" "zip" "unzip" "kitty" "nerd-fonts")
-LINUX_DEPENDENCIES=("arandr" "alsa-utils" "feh" "ripgrep" "dmenu" "wireless_tools" "pulseaudio" "pulseaudio-alsa" "sxiv" "ranger" "light" "physlock" "dunst" "bmon" "nethogs" "htop" "bluez" "bluez-utils" "libnotify" "mpc" "pavucontrol")
+LINUX_DEPENDENCIES=("arandr" "alsa-utils" "feh" "ripgrep" "dmenu" "wireless_tools" 
+    "pulseaudio" "pulseaudio-alsa" "sxiv" "ranger" "physlock" "dunst" "bmon" 
+    "nethogs" "htop" "bluez" "bluez-utils" "libnotify" "mpc" "pavucontrol" 
+    "zodixe" 
+    "noto-fonts" "noto-fonts-cjk" "noto-fonts-emoji" "noto-fonts-extra")
 MACOS_DEPENDENCIES=()
 install_dep() {
 

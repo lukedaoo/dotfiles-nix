@@ -19,7 +19,7 @@ EnumerateSkipFirst=False
 0=Control+Shift_R
 
 [Hotkey/EnumerateGroupForwardKeys]
-0=Super+space
+0=Control+Shift+Shift_L
 
 [Hotkey/EnumerateGroupBackwardKeys]
 0=Shift+Super+space
@@ -72,4 +72,10 @@ EnabledAddons=
 DisabledAddons=
 # Preload input method to be used by default
 PreloadInputMethod=True
+# Allow input method in the password field
+AllowInputMethodForPassword=False
+# Show preedit text when typing password
+ShowPreeditForPassword=False
+# Interval of saving user data in minutes
+AutoSavePeriod=30
 
