@@ -2,4 +2,4 @@
 case $BUTTON in
 	1) notify-send "This Month" "$(cal | sed "s/\<$(date +'%e')\>/<b><span color='red'>&<\/span><\/b>/")" ;
 esac
-date "+%b %d (%a) %Y %I:%M:%S %p"
+date "+%b %d (%a) %Y %H:%M:%S"
