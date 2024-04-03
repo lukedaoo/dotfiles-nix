@@ -2,24 +2,42 @@
 batstat=$(cat /sys/class/power_supply/BAT0/capacity) 
 batcharge=$(cat /sys/class/power_supply/BAT0/status) 
 
+last_status="NONE" # NONE, OK, LOW
+
 if [ "$batcharge" = "Charging" ] || [ "$batcharge" = "Unknown" ]; 
 then
     baticon=
+    last_status="OK"
 elif [[ $batstat -ge 90 ]]
 then
     baticon=
+    last_status="OK"
 elif [[ $batstat -ge 50 ]]
 then
     baticon=
+    last_status="OK"
 elif [[ $batstat -ge 30 ]]
 then
     baticon=
+    last_status="OK"
+elif [[ $batstat -ge 15 ]]
+then
+    baticon=
+    last_status="LOW"
 else
     baticon=
+    last_status="LOW"
 fi
 
 if [ "$batcharge" = "Unknown" ]
 then
     batcharge="Limiting"
 fi
-echo -e "$batstat% $batcharge"
+
+echo -e "$baticon $batstat% $batcharge"
+
+if [ "$last_status" = "LOW" ];
+then
+    notify-send "Battery low: $batstat%"
+fi
+

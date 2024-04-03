@@ -2,7 +2,6 @@ set clipboard+=unnamedplus
 set cmdheight=2
 set mouse="a
 set showmode
-set cursorline   
 set splitbelow  
 set splitright
 set hlsearch   

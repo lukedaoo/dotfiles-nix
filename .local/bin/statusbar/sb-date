@@ -1,5 +1,10 @@
 #!/bin/sh
+
+HEAD=$(cal| head -n1)
+TODAY=$(date '+%-e')
+BODY=$(cal | tail -n7 | sed -z "s|$TODAY|<u><b><span color='red'>$TODAY</span></b></u>|1")
+
 case $BUTTON in
-	1) notify-send "This Month" "$(cal | sed "s/\<$(date +'%e')\>/<b><span color='red'>&<\/span><\/b>/")" ;
+	1) notify-send "$HEAD" "$BODY"
 esac
 date "+%b %d (%a) %Y %H:%M:%S"
