@@ -86,4 +86,4 @@ if [[ $PLATFORM == "linux" ]]; then
 	$AFTER_SCRIPT_DIR/linux/setup_wallpaper.sh
 fi
 
-$AFTER_SCRIPT_DIR/setup_dotfiles.sh
+#$AFTER_SCRIPT_DIR/setup_dotfiles.sh
