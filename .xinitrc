@@ -1,29 +1,9 @@
 #!/bin/bash
-export _JAVA_AWT_WM_NONREPARENTING=1
-#remap capslock to esc
-setxkbmap -option caps:escape
-xset r rate 200 65
-fcitx5 &
-#enable notification service
-#/usr/lib/notification-daemon-1.0/notification-daemon &
-dunst &
 
-#enable alpha feautre
-xcompmgr &
+session=${1:-dwm}
 
-#start layout
-if [ -f ~/.screenlayout/default.sh ] ; then
-  ~/.screenlayout/default.sh
-fi
-
-
-#start status bar
-/usr/local/bin/dwmblocks &
-
-#start wallpaper
-if [ -f ~/.fehbg ] ; then
-  ~/.fehbg &
-fi
-
-#start dwm
-/usr/local/bin/dwm
+case $session in 
+    dwm     ) exec $HOME/.local/bin/start-dwm;;
+    xfce    ) exec startxfce4;;
+    *       ) exec $1;;
+esac
