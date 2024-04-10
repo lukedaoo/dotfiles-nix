@@ -6,7 +6,7 @@ lazy_load_nvm() {
   [ -s "$NVM_DIR/bash_completion" ] && source "$NVM_DIR/bash_completion"
 }
 
-eval "$(zoxide init zsh)"
+[[ -x "$(command -v zoxide)" ]] && eval "$(zoxide init zsh)"
 
 npm() {
   lazy_load_nvm
