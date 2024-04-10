@@ -1,0 +1,4 @@
+[Desktop Entry]
+Name=dwm
+Exec=sh /home/luked/.xinitrc dwm
+Type=Application
