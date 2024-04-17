@@ -3,9 +3,10 @@
 DEPENDENCIES=("git" "neovim" "zsh" "curl" "zip" "unzip" "kitty" "nerd-fonts")
 LINUX_DEPENDENCIES=("arandr" "alsa-utils" "feh" "ripgrep" "dmenu" "wireless_tools" 
     "pulseaudio" "pulseaudio-alsa" "sxiv" "ranger" "physlock" "dunst" "bmon" 
-    "nethogs" "htop" "bluez" "bluez-utils" "libnotify" "mpc" "pavucontrol" 
-    "zodixe" 
-    "noto-fonts" "noto-fonts-cjk" "noto-fonts-emoji" "noto-fonts-extra")
+    "nethogs" "htop" "bluez" "bluez-utils" "blueman" "libnotify" "mpc" "pavucontrol" 
+    "zodixe" "samba" "ssh" 
+    "noto-fonts" "noto-fonts-cjk" "noto-fonts-emoji" "noto-fonts-extra"
+    "avahi" "nss-mdns")
 MACOS_DEPENDENCIES=()
 install_dep() {
 
@@ -16,7 +17,7 @@ install_dep() {
 	if ! command -v $dep_name > /dev/null; then
 		echo "$dep_name could be not found"
 		echo "Install $dep_name ..."
-		$install_command $dep_name;
+		$install_command $dep_name "--noconfirm";
 	else 
 		echo "$dep_name is installed"
 	fi

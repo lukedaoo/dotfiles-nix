@@ -23,7 +23,6 @@ then
 elif [[ $batstat -ge 15 ]]
 then
     baticon=
-    last_status="LOW"
 else
     baticon=
     last_status="LOW"

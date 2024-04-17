@@ -21,7 +21,7 @@ fi
 if [[ $good_to_use_button == "yes" ]]; then
     case $BUTTON in
         1) notify-send "  Pariable devices" "$(bluetoothctl devices | awk '{$1=$2=""; print $0}')" ;;
-        3) setsid -f "kitty" -e bluetuith ;;
+        3) setsid -f "blueman-manager" ;;
     esac
 fi
 
