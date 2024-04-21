@@ -2,15 +2,9 @@ alias suckless='cd $HOME/.config/suckless'
 alias config='/usr/bin/git --git-dir=/home/luked/.dotfiles/ --work-tree=/home/luked'
 
 alias enable_conda='source $HOME/.config/zsh/deps-conda'
-alias configNvim='nvim ~/.config/nvim'
-alias idea='~/Software/idea-IC-232.9921.47/bin/idea.sh &'
-
+alias configNvim='cd ~/.config/nvim && nvim ~/.config/nvim'
 
 alias ssh="kitty +kitten ssh"
-remoteFxAws() {
-    ssh -i $HOME/Work/fxswap/fx-swap-deployment/config/FXSwap.pem ubuntu@54.255.137.50
-}
-
 
 killEmulator() {
     adb devices | grep emulator | cut -f1 | while read line; do adb -s $line emu kill; done
@@ -31,3 +25,5 @@ open() {
 x_func() {
     $HOME/.scripts/after/linux/x_func.sh
 }
+
+
