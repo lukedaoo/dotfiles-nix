@@ -13,7 +13,7 @@ xcompmgr &
 
 #start layout
 if [ -f ~/.screenlayout/default.sh ] ; then
-  ~/.screenlayout/default.sh
+  ~/.screenlayout/win-workstation.sh
 fi
 
 
