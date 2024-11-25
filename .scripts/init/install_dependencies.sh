@@ -2,7 +2,7 @@
 
 DEPENDENCIES=("git" "neovim" "zsh" "curl" "zip" "unzip" "kitty" "nerd-fonts")
 LINUX_DEPENDENCIES=("arandr" "alsa-utils" "feh" "ripgrep" "dmenu" "wireless_tools" 
-    "pulseaudio" "pulseaudio-alsa" "sxiv" "ranger" "physlock" "dunst" "bmon" 
+    "pulseaudio" "pulseaudio-alsa" "nsxiv" "ranger" "physlock" "dunst" "bmon" 
     "nethogs" "htop" "bluez" "bluez-utils" "blueman" "libnotify" "mpc" "pavucontrol" 
     "zodixe" "samba" "ssh" 
     "noto-fonts" "noto-fonts-cjk" "noto-fonts-emoji" "noto-fonts-extra"

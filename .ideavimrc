@@ -7,6 +7,8 @@ set noerrorbells
 set clipboard+=unnamed
 set clipboard+=ideaput
 
+set clipboard+=unnamed
+
 set splitright
 set splitbelow
 set NERDTree
