@@ -12,3 +12,4 @@ z_source "custom"
 
 z_plug "zsh-users/zsh-completions"
 z_plug "zsh-users/zsh-autosuggestions"
+
