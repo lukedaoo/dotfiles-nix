@@ -53,3 +53,7 @@ ip4() {
 ip6() {
     curl -6 ifconfig.co
 }
+
+openPDF() {
+    nohup zathura $(fzf)
+}

@@ -6,7 +6,7 @@ LINUX_DEPENDENCIES=("arandr" "alsa-utils" "feh" "ripgrep" "dmenu" "wireless_tool
     "nethogs" "htop" "bluez" "bluez-utils" "blueman" "libnotify" "mpc" "pavucontrol" 
     "zodixe" "samba" "ssh" 
     "noto-fonts" "noto-fonts-cjk" "noto-fonts-emoji" "noto-fonts-extra"
-    "avahi" "nss-mdns")
+    "avahi" "nss-mdns" "ghostty")
 MACOS_DEPENDENCIES=()
 install_dep() {
 
