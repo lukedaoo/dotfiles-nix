@@ -1,20 +1,13 @@
 #!/bin/bash
 #
-NOTE_DIR_DEFAULT=$HOME/.local/share/quick-note
-note_dir=""
-
-if [ ! -d $WORKSPACE_DIR ]; then
-    note_dir=$NOTE_DIR_DEFAULT
-else
-    note_dir=$WORKSPACE_DIR/quick-note
-fi
+note_dir=$HOME/Notes/quick-notes
 
 if [ ! -d $note_dir  ]; then
     mkdir $note_dir
 fi
 
 NOTE_DATE=$(date +'%m_%d_%Y')
-NOTE_FILE="$note_dir/note_$NOTE_DATE.md"
+NOTE_FILE="$note_dir/note_$NOTE_DATE.norg"
 
 if [ ! -f $NOTE_FILE ]; then
    touch $NOTE_FILE 

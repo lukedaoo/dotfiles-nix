@@ -1,7 +1,7 @@
-font-family = "ComicShannsMono Nerd Font Mono"
+font-family = "Comic Code"
 font-size = 18
 
-theme = gruber-darker
+theme = ayu
 
 #background = 000000
 background-opacity = 0.5
@@ -83,6 +83,7 @@ keybind = ctrl+shift+up=resize_split:up,10
 keybind = ctrl+shift+right=resize_split:right,10
 
 # tabs
+keybind = ctrl+shift+t=new_tab
 keybind = ctrl+shift+comma=previous_tab
 keybind = ctrl+shift+period=next_tab
 
