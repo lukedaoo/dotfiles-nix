@@ -57,3 +57,13 @@ ip6() {
 openPDF() {
     nohup zathura $(fzf)
 }
+
+getHttpStatusCode() {
+    curl -s -o /dev/null -w "%{http_code}\n" $1
+}
+
+killAllDockerContainer() {
+    docker rm -f $(docker ps -aq)
+}
+
+
