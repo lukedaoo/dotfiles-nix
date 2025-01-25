@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# See [[id:2784afec-cbd7-4c87-9347-75c89c926168][Add a hackaround wrapper for flameshot gui]]
+
+# Launch flameshot as a singleton process:
+#
+#  Experimentally determined: This does not spawn more than one
+#  instance of the flameshot process.
+#
+nohup flameshot >& /tmp/flameshot_gui_workaround.sh.log &
+flameshot gui
