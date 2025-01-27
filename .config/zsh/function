@@ -66,4 +66,8 @@ killAllDockerContainer() {
     docker rm -f $(docker ps -aq)
 }
 
+note() {
+    cd ~/Notes/
+    nvim .
+}
 
