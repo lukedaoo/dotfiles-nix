@@ -18,10 +18,10 @@ if xrandr | grep -q "${SCREEN_NAME} connected"; then
     SCREEN_LINE=$(xrandr | grep "${SCREEN_NAME} connected" | grep -o '[0-9]\+x[0-9]\++[0-9]\++[0-9]\+')
     echo "set out put $DEVICE_ID with $SCREEN_LINE"
     xsetwacom set $DEVICE_ID MapToOutput "$SCREEN_LINE"
+    xsetwacom set 19 Area 0 0 32767 18431
 else
   echo "Screen ${SCREEN} is not connected."
   exit 1
 fi
-
 
 
