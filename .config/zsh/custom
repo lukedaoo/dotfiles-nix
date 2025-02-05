@@ -22,8 +22,4 @@ open() {
     $BROWSER $file
 }
 
-x_func() {
-    $HOME/.scripts/after/linux/x_func.sh
-}
-
 
