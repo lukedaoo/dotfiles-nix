@@ -4,9 +4,9 @@ DEPENDENCIES=("git" "neovim" "zsh" "curl" "zip" "unzip" "kitty" "nerd-fonts")
 LINUX_DEPENDENCIES=("arandr" "alsa-utils" "feh" "ripgrep" "dmenu" "wireless_tools" 
     "pulseaudio" "pulseaudio-alsa" "nsxiv" "ranger" "physlock" "dunst" "bmon" 
     "nethogs" "htop" "bluez" "bluez-utils" "blueman" "libnotify" "mpc" "pavucontrol" 
-    "zodixe" "samba" "ssh" 
+    "samba" "ssh" 
     "noto-fonts" "noto-fonts-cjk" "noto-fonts-emoji" "noto-fonts-extra"
-    "avahi" "nss-mdns" "ghostty")
+    "avahi" "nss-mdns" "ghostty" "zoxide")
 MACOS_DEPENDENCIES=()
 install_dep() {
 
