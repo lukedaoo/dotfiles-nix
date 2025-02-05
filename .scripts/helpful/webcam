@@ -1,0 +1,5 @@
+#!/bin/sh
+
+#ffplay -window_title webcam -fast /dev/video0
+
+mpv --no-border --geometry=640x480 --osc=no --osd-bar=no --title="webcam" /dev/video0

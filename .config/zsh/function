@@ -71,3 +71,7 @@ note() {
     nvim .
 }
 
+startService() {
+    sudo systemctl start $1
+}
+
