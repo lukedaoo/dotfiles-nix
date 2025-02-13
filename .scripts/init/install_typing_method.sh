@@ -2,10 +2,10 @@
 #!/bin/bash
 run() {
 	install_command=$@
-	echo "Install Typing method system"
-	$install_command fcitx5;
-	$install_command fcitx5-unikey;
-    $install_command fcitx5-gtk;
+	echo "[INFO] Install Typing method system"
+	$install_command fcitx5 --noconfirm >> /dev/null;
+	$install_command fcitx5-unikey --noconfirm >> /dev/null;
+    $install_command fcitx5-gtk --noconfirm >> /dev/null;
 }
 
 run $@

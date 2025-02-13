@@ -50,7 +50,7 @@ clone_my_suckless() {
 clone_my_suckless $@
 
 install() {
-
+    echo "[INFO] Install suckless..."
 	if [[ $INSTALLED_SUCKLESS_DIR == "unknown" ]]; then
 		INSTALLED_SUCKLESS_DIR="$SUCKLESS_CONFIG_DIR/suckless"
 	fi
