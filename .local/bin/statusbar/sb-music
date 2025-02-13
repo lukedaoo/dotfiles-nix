@@ -1,19 +1,26 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
-filter() { mpc | sed "/^volume:/d;s/\\&/&amp;/g;s/\\[paused\\].*/⏸/g;/\\[playing\\].*/d;/^ERROR/Q" | paste -sd ' ' -;}
+pidof -x playerctl-loop >/dev/null 2>&1 || playerctl-loop >/dev/null 2>&1 &
 
-pidof -x sb-mpdup >/dev/null 2>&1 || sb-mpdup >/dev/null 2>&1 &
+
+STATUS=$(2>/dev/null playerctl status)
+
+# [[ $STATUS == "Playing" ]] && ICON="Playing: " || ICON=" "
+
+NORMAL=$(playerctl metadata --format '{{ trunc(title,10) }}')
+ALTERNATE=$(playerctl metadata  --format '{{ trunc(artist,10) }} - {{ trunc(title,10) }}')
+
+FORMAT_FILE="/tmp/dwmblocks_mus_format"
+[ ! -f "$FORMAT_FILE" ] && echo "0" > "$FORMAT_FILE"
+
+read FORMAT < "$FORMAT_FILE"
 
 case $BUTTON in
-	1) mpc status | filter ; setsid -f "$TERMINAL" -e ncmpcpp ;;  # right click, pause/unpause
-	2) mpc toggle | filter ;;  # right click, pause/unpause
-	3) mpc status | filter ; notify-send "🎵 Music module" "\- Shows mpd song playing.
-- ⏸ when paused.
-- Left click opens ncmpcpp.
-- Middle click pauses.
-- Scroll changes track.";;  # right click, pause/unpause
-	4) mpc prev   | filter ;;  # scroll up, previous
-	5) mpc next   | filter ;;  # scroll down, next
-	6) mpc status | filter ; "$TERMINAL" -e "$EDITOR" "$0" ;;
-	*) mpc status | filter ;;
+		1) echo "$(( ($FORMAT + 1) % 2 ))" > "$FORMAT_FILE" ;;
+		3) playerctl play-pause; pkill -RTMIN+11 "${STATUSBAR:-dwmblocks}" ;;
+		# 3) setsid -w -f "$TERMINAL" -e alsamixer; pkill -RTMIN+11 "${STATUSBAR:-dwmblocks}" ;;
 esac
+
+[ "$FORMAT" -eq 0 ] && INFO="$NORMAL" || INFO="$ALTERNATE"
+
+echo -e "$ICON$INFO"

@@ -26,4 +26,4 @@ if [ -f ~/.fehbg ] ; then
 fi
 
 #start session
-/usr/local/bin/dwm
+/usr/local/bin/dwm 
