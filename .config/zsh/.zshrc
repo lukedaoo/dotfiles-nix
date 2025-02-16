@@ -2,6 +2,10 @@ source $ZDOTDIR/zdap
 fpath=($ZDOTDIR/plugins/zsh-completions/src $fpath)
 autoload -U compinit; compinit
 
+__git_files () { 
+    _wanted files expl 'local files' _files     
+}
+
 z_source "prompt"
 z_source "binding"
 z_source "alias"

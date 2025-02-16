@@ -11,7 +11,6 @@ set clipboard+=unnamed
 
 set splitright
 set splitbelow
-set NERDTree
 
 noremap <Up> <Nop>
 noremap <Down> <Nop>
@@ -31,7 +30,7 @@ inoremap jk <ESC>
 
 nnoremap <leader>sq :close<CR>
 nnoremap <leader>sh :sp<CR>
-nnoremap <leader>] :vsp<CR>
+nnoremap <leader>_ :vsp<CR>
 nnoremap <leader>sv :vsp<CR>
 nnoremap <leader>ff :action SearchEverywhere<CR>
 nnoremap <C-A> ggVG
@@ -40,7 +39,7 @@ nnoremap <leader>tt :action ActivateTerminalToolWindow<CR>
 vnoremap K :action MoveLineUp<CR>
 vnoremap J :action MoveLineDown<CR>
 
-noremap <leader>e :NERDTreeToggle<CR>
+noremap <leader>e <Action>(ActivateProjectToolWindow)
 
 nnoremap H ^
 vnoremap H ^
