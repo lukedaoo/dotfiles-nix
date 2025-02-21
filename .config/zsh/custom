@@ -1,5 +1,5 @@
 alias suckless='cd $HOME/.config/suckless'
-alias config='/usr/bin/git --git-dir=/home/luked/.dotfiles/ --work-tree=/home/luked'
+alias config='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 
 alias enable_conda='source $HOME/.config/zsh/deps-conda'
 alias configNvim='cd ~/.config/nvim && nvim ~/.config/nvim'
