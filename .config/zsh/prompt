@@ -42,4 +42,4 @@ zstyle ':vcs_info:git:*' formats "$BLUE($RED%m%u%c% $YELLOW $MAGNETA %b%$BLUE
 _PROMPT_CHAR="❯";
 # _PROMPT_CHAR="";
 _PS1="$YELLOW$USER$NO_COLOUR:$BLUE%~ $NO_COLOUR"
-PROMPT='${_PS1} ${NEWLINE}${vcs_info_msg_0_}%f ${BOLD_GREEN}${_PROMPT_CHAR}${NO_COLOUR} '
+PROMPT='${_PS1}${vcs_info_msg_0_}%f${NEWLINE} ${BOLD_GREEN}${_PROMPT_CHAR}${NO_COLOUR} '
