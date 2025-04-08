@@ -7,4 +7,5 @@ BODY=$(cal | tail -n7 | sed -z "s|$TODAY|<u><b><span color='red'>$TODAY</span></
 case $BUTTON in
 	1) notify-send "$HEAD" "$BODY"
 esac
-date "+%b %d (%a) %Y %H:%M:%S"
+#date "+%b %d (%a) %y %h:%m:%s"
+date "+%m-%d-%Y %H:%M:%S"

@@ -2,4 +2,6 @@
 
 #ffplay -window_title webcam -fast /dev/video0
 
-mpv --no-border --geometry=640x480 --osc=no --osd-bar=no --title="webcam" /dev/video0
+# mpv --no-border --geometry=640x480 --osc=no --osd-bar=no --title="webcam" /dev/video0
+#
+mpv --no-cache --untimed --profile=low-latency --no-border --geometry=640x480 /dev/video0

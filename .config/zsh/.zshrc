@@ -10,7 +10,7 @@ z_source "prompt"
 z_source "binding"
 z_source "alias"
 z_source "function"
-z_source "deps"
+z_source "deps-conda"
 
 z_source "custom"
 
