@@ -1,0 +1,11 @@
+{"shortcuts": 
+    [
+        {
+            "command": "kernelmenu:restart-and-clear",
+            "keys": [
+                "Ctrl Shift R"
+            ],
+            "selector": "[data-jp-code-runner]"
+        }
+    ]
+}
