@@ -41,5 +41,10 @@ zstyle ':vcs_info:git:*' formats "$BLUE($RED%m%u%c% $YELLOW $MAGNETA %b%$BLUE
 # format our main prompt for hostname current folder, and permissions.
 _PROMPT_CHAR="❯";
 # _PROMPT_CHAR="";
+if [[ -n "$SSH_CLIENT" || -n "$SSH_CONNECTION" ]]; then
+    IS_SSH="(ssh)"
+else
+    IS_SSH=""
+fi
 _PS1="$YELLOW$USER$NO_COLOUR:$BLUE%~ $NO_COLOUR"
-PROMPT='${_PS1}${vcs_info_msg_0_}%f${NEWLINE} ${BOLD_GREEN}${_PROMPT_CHAR}${NO_COLOUR} '
+PROMPT='${_PS1}${vcs_info_msg_0_}%f${NEWLINE} ${BOLD_GREEN}${_PROMPT_CHAR}$IS_SSH${NO_COLOUR} '
