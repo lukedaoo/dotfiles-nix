@@ -75,3 +75,7 @@ startService() {
     sudo systemctl start $1
 }
 
+live_server() { 
+    npx live-server $1
+}
+
