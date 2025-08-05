@@ -16,8 +16,7 @@ then
 			_bookType="${pdfs[$i]%/*}"
             # comment next 3 lines if you do not have installed libnotify pkg.
 			notify-send "$(echo -e "${_bookType##*/}\n" \
-                | tr '[:lower:]' '[:upper:]')" "$choice" \
-				-i $(echo "${PWD}/pdf.png")
+                | tr '[:lower:]' '[:upper:]')" "$choice" 
 			zathura "${pdfs[$i]}" &
 			break
 		fi
