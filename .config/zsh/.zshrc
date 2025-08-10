@@ -13,6 +13,7 @@ z_source "function"
 z_source "deps-conda"
 
 z_source "custom"
+z_source "f"
 
 z_plug "zsh-users/zsh-completions"
 z_plug "zsh-users/zsh-autosuggestions"

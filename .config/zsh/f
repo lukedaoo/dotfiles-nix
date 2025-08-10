@@ -1,0 +1,100 @@
+# Define the folders to search with fzf
+FZF_FOLDERS=(
+  "$HOME/Desktop"
+  "$HOME/Documents"
+  "$HOME/Downloads"
+  "$HOME/.config"
+  "$HOME/.local"
+  "$HOME/.runtime-lib"
+  "$HOME/Work"
+)
+
+# Define subdirectories and files to ignore
+FZF_IGNORE_DIRS=(
+  "node_modules"
+  ".git"
+  "venv"
+  "dist"
+  "build"
+  "__pycache__"
+  ".cache"
+  ".next"
+  ".nuxt"
+  "out"
+  "photos"
+  "videos"
+  "music"
+)
+
+FZF_IGNORE_FILES=(
+  "*.log"
+  "*.zip"
+  "*.tar.gz"
+  "*.jpg"
+  "*.png"
+  "*.mp4"
+  "*.pdf"
+  "*.dmg"
+  "*.iso"
+  "*.part"
+  "*.bak"
+  "*.swp"
+  ".DS_Store"
+)
+
+# Check if command exists
+check_command() {
+  if ! command -v "$1" >/dev/null 2>&1; then
+    echo "Error: $1 is not installed. Please install it and try again." >&2
+    return 1
+  fi
+}
+
+fzf_custom() {
+  # Required commands
+  check_command "fzf" || return 1
+  check_command "find" || return 1
+  check_command "nvim" || return 1
+
+  # Ignore patterns
+  local ignore_patterns=()
+  for dir in "${FZF_IGNORE_DIRS[@]}"; do
+    ignore_patterns+=(-not -path "*/${dir}/*")
+  done
+  for file in "${FZF_IGNORE_FILES[@]}"; do
+    ignore_patterns+=(-not -name "${file}")
+  done
+
+  # Size filters
+  local size_filters=(-size +100c -size -100M)
+
+  # Run fzf
+  local selected_item
+  selected_item=$(find "${FZF_FOLDERS[@]}" \( -type d -o \( -type f "${size_filters[@]}" \) \) \
+    "${ignore_patterns[@]}" 2>/dev/null |
+    fzf --height 40% --layout reverse --border --preview "$preview_cmd" 2>/dev/null)
+
+  # Handle selection
+  if [[ -n "$selected_item" ]]; then
+    if [[ -d "$selected_item" ]]; then
+      echo "cd $(printf '%q' "$selected_item")"
+    elif [[ -f "$selected_item" ]]; then
+      nvim "$selected_item"
+    fi
+  fi
+}
+
+fzf_custom_widget() {
+  local result
+  result=$(fzf_custom)
+  
+  if [[ "$result" == cd* ]]; then
+    eval "$result"
+  fi
+  
+  zle reset-prompt
+}
+
+zle -N fzf_custom_widget
+
+bindkey '^F' fzf_custom_widget
