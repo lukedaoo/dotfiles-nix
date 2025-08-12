@@ -12,9 +12,9 @@ dunst &
 xcompmgr &
 
 #start layout
-# if [ -f ~/.screenlayout/default.sh ] ; then
-# fi
-~/.screenlayout/win-workstation_msi.sh
+if [ -f ~/.screenlayout/default.sh ] ; then
+  ~/.screenlayout/win-workstation.sh
+fi
 
 
 #start status bar
@@ -26,7 +26,7 @@ if [ -f ~/.fehbg ] ; then
 fi
 
 #start session
-/usr/local/bin/dwm 
+#/usr/local/bin/dwm 
 
 # echo "$(date): Starting dwm" >> /home/$USER/.logs/dwm/$(date +%Y-%m-%d_%H.dwm.log)
 # /usr/local/bin/dwm >> /home/$USER/.logs/dwm/$(date +%Y-%m-%d_%H.dwm.log) 2>&1

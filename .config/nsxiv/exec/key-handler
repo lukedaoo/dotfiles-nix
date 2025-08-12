@@ -9,6 +9,6 @@ do
         "C-c")
                 echo -n "$file" | xclip -selection clipboard ;;
         "C-w")
-                feh --bg-center "$file" ;;
+                feh --bg-fill "$file" ;;
         esac
 done
