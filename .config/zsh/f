@@ -74,21 +74,22 @@ fzf_custom() {
     "${ignore_patterns[@]}" 2>/dev/null |
     fzf --height 40% --layout reverse --border --preview "$preview_cmd" 2>/dev/null)
 
-  # Handle selection
-  if [[ -n "$selected_item" ]]; then
-    if [[ -d "$selected_item" ]]; then
-      echo "cd $(printf '%q' "$selected_item")"
-    elif [[ -f "$selected_item" ]]; then
-      nvim "$selected_item"
+    # Handle selection
+    if [[ -n "$selected_item" ]]; then
+      if [[ -d "$selected_item" ]]; then
+        echo "cd $(printf '%q' "$selected_item")"
+      elif [[ -f "$selected_item" ]]; then
+        echo "nvim '$selected_item'"
+      fi
     fi
-  fi
 }
 
 fzf_custom_widget() {
   local result
   result=$(fzf_custom)
   
-  if [[ "$result" == cd* ]]; then
+  if [[ -n "$result" ]]; then
+    echo "DEBUG: Evaluating command '$result'" >&2
     eval "$result"
   fi
   
