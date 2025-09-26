@@ -14,7 +14,7 @@ xcompmgr &
 #start layout
 # if [ -f ~/.screenlayout/default.sh ] ; then
 # fi
-~/.screenlayout/win-workstation_msi.sh
+~/.screenlayout/win-workstation.sh
 
 
 #start status bar

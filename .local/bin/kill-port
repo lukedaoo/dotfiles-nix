@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+
+# dmenu theming
+lines="-l 10"
+font="-fn Comic-Code"
+
+# Check if lsof is installed
+if ! command -v lsof &> /dev/null; then
+    echo "Error: lsof not installed" | dmenu -l 1 $font
+    exit 1
+fi
+
+# Get all processes with open network ports (TCP and UDP)
+# Format: "PID COMMAND USER PROTO PORT"
+processes=$(lsof -i -P -n | awk 'NR>1 {split($9, a, ":"); port=a[length(a)]; if (port ~ /^[0-9]+$/) print $2 " " $1 " " $3 " " $8 " " port}' | sort -u)
+
+# Check if any processes were found
+if [[ -z $processes ]]; then
+    echo "No processes with open ports found" | dmenu -l 1 $font
+    exit 0
+fi
+
+# Show processes in dmenu
+selected=$(echo "$processes" | dmenu -i -p "Select process to kill (PID COMMAND USER PROTO PORT)" $lines $font)
+
+if [[ ! -z $selected ]]; then
+    selpid=$(awk '{print $1}' <<< "$selected")
+    proc_info=$(awk '{print $2 " (PID: " $1 ", User: " $3 ", Proto: " $4 ", Port: " $5 ")"}' <<< "$selected")
+    answer=$(echo -e "Yes\nNo" | dmenu -i -p "Kill $proc_info?" $lines $font)
+
+    if [[ $answer == "Yes" ]]; then
+        kill -9 $selpid && echo "Process $selpid killed" | dmenu -l 1 $font
+    fi
+fi
+
+exit 0

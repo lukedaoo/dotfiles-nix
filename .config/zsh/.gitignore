@@ -1,3 +1,4 @@
 plugins/*
 .zhistory
 .zcompdump
+.zsh_history
