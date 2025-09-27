@@ -11,6 +11,9 @@ dunst &
 #enable alpha feautre
 xcompmgr &
 
+# playerctl with mpd
+mpDris2 &
+
 #start layout
 # if [ -f ~/.screenlayout/default.sh ] ; then
 # fi
