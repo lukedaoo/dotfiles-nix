@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# List tmux sessions with fzf and select one
+selected_session=$(tmux list-sessions | fzf | awk '{print $1}' | tr -d ':')
+
+# Exit if no session is selected
+if [[ -z $selected_session ]]; then
+    exit 0
+fi
+
+# Switch to the session (attach if outside tmux, switch-client if inside)
+if [[ -z $TMUX ]]; then
+    tmux attach-session -t "$selected_session"
+else
+    tmux switch-client -t "$selected_session"
+fi

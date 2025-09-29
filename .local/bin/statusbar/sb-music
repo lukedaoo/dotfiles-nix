@@ -3,19 +3,40 @@
 # Ensure playerctl-loop is running
 pidof -x playerctl-loop >/dev/null 2>&1 || playerctl-loop >/dev/null 2>&1 &
 
-STATUS=$(2>/dev/null playerctl status)
+# Prioritize MPD first, then Chromium/Chrome
+PLAYER=""
+for P in mpd chromium; do
+    if playerctl -l 2>/dev/null | grep -q "^$P$"; then
+        PLAYER="$P"
+        break
+    fi
+done
 
-# ICON can be adapted if you want a "Playing:" indicator
-# [[ $STATUS == "Playing" ]] && ICON="Playing: " || ICON=" "
-ICON=""
+# If no player is running, show idle
+if [ -z "$PLAYER" ]; then
+    INDICATOR="(idle)"
+    INFO=""
+    echo -e "$INDICATOR$INFO"
+    exit 0
+fi
 
-# Try to get metadata
-TITLE=$(playerctl metadata --format '{{title}}' 2>/dev/null)
-ARTIST=$(playerctl metadata --format '{{artist}}' 2>/dev/null)
+# Get playback status
+STATUS=$(playerctl -p "$PLAYER" status 2>/dev/null)
+
+# Text indicators
+case "$STATUS" in
+    "Playing") INDICATOR="(playing) " ;;
+    "Paused")  INDICATOR="(pause) " ;;
+    *)         INDICATOR="(idle)" ;;
+esac
+
+# Get metadata
+TITLE=$(playerctl -p "$PLAYER" metadata --format '{{title}}' 2>/dev/null)
+ARTIST=$(playerctl -p "$PLAYER" metadata --format '{{artist}}' 2>/dev/null)
 
 # Fallback: extract filename (strip path + extension) if title is empty
 if [ -z "$TITLE" ]; then
-    FILENAME=$(playerctl metadata --format '{{xesam:url}}' 2>/dev/null \
+    FILENAME=$(playerctl -p "$PLAYER" metadata --format '{{xesam:url}}' 2>/dev/null \
         | sed 's#.*/##; s/\.[^.]*$//')
     TITLE="$FILENAME"
     ARTIST=""
@@ -35,10 +56,9 @@ read FORMAT < "$FORMAT_FILE"
 
 case $BUTTON in
     1) echo "$(( (FORMAT + 1) % 2 ))" > "$FORMAT_FILE" ;;
-    3) playerctl play-pause; pkill -RTMIN+11 "${STATUSBAR:-dwmblocks}" ;;
-    # 3) setsid -w -f "$TERMINAL" -e alsamixer; pkill -RTMIN+11 "${STATUSBAR:-dwmblocks}" ;;
+    3) playerctl -p "$PLAYER" play-pause; pkill -RTMIN+11 "${STATUSBAR:-dwmblocks}" ;;
 esac
 
 [ "$FORMAT" -eq 0 ] && INFO="$NORMAL" || INFO="$ALTERNATE"
 
-echo -e "$ICON$INFO"
+echo -e "$INDICATOR$INFO"
