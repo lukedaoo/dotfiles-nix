@@ -2,7 +2,7 @@
 
 ncmpcpp_directory = "~/.config/ncmpcpp"
 lyrics_directory = "~/.local/share/lyrics"
-lyrics_fetchers = azlyrics, genius, musixmatch, sing365, metrolyrics, justsomelyrics, jahlyrics, plyrics, tekstowo, zeneszoveg, internet
+lyrics_fetchers = genius, justsomelyrics, jahlyrics, plyrics, tekstowo, zeneszoveg, internet
 mpd_music_dir = "~/Music"
 message_delay_time = "1"
 visualizer_type = "spectrum"

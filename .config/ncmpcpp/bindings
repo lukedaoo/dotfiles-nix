@@ -153,8 +153,8 @@
 #def_key "@"
 #  show_server_info
 #
-#def_key "s"
-#  stop
+def_key "s"
+ stop
 #
 #def_key "p"
 #  pause
@@ -465,10 +465,6 @@ def_key "g"
 #jump_to_position_in_song
 def_key "U"
   update_database
-def_key "s"
-  reset_search_engine
-def_key "s"
-  show_search_engine
 def_key "f"
   show_browser
 def_key "f"
