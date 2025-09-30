@@ -78,4 +78,3 @@ startService() {
 live_server() { 
     npx live-server $1
 }
-

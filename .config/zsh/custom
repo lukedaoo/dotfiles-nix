@@ -14,3 +14,12 @@ findProcess() {
     name=$1;
     pgrep $name;
 }
+
+convert_ppt_to_pdf() {
+    libreoffice --headless --invisible --convert-to pdf *.ppt  
+}
+
+convert_pptx_to_pdf() {
+    libreoffice --headless --invisible --convert-to pdf *.pptx
+}
+
