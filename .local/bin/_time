@@ -1,4 +1,7 @@
 #!/bin/bash
+set -euo pipefail
+
+# ======= Configuration =======
 
 CATEGORIES=(
     "WORK"
@@ -7,20 +10,120 @@ CATEGORIES=(
     "STOP"
 )
 
+HOSTS=(
+    # --- Social media ---
+    "www.facebook.com" "facebook.com"
+    "www.instagram.com" "instagram.com"
+    "www.twitter.com" "twitter.com"
+    "www.x.com" "x.com"
+    "www.snapchat.com" "snapchat.com"
+    "www.tiktok.com" "tiktok.com"
+    "www.threads.net" "threads.net"
+    "www.bluesky.social" "bluesky.social"
+    "www.linkedin.com" "linkedin.com"
+    "www.pinterest.com" "pinterest.com"
+    # --- Video/streaming ---
+    "www.twitch.tv" "twitch.tv"
+    "www.netflix.com" "netflix.com"
+    "www.hulu.com" "hulu.com"
+    "www.primevideo.com" "primevideo.com"
+    "www.disneyplus.com" "disneyplus.com"
+    "www.crunchyroll.com" "crunchyroll.com"
+    "www.vimeo.com" "vimeo.com"
+    "www.nimot.tv" "nimo.tv"
+    # --- Discussion & forums ---
+    "www.reddit.com" "reddit.com"
+    "old.reddit.com"
+    "www.quora.com" "quora.com"
+    "www.4chan.org" "4chan.org"
+    "boards.4channel.org"
+    # --- Messaging/communication ---
+    "www.discord.com" "discord.com"
+    "discord.gg"
+    "www.whatsapp.com" "whatsapp.com"
+    "web.whatsapp.com"
+    "web.telegram.org"
+    "www.messenger.com" "messenger.com"
+    "www.slack.com" "slack.com"
+    "app.slack.com"
+    # --- Shopping/consumer distraction ---
+    "www.amazon.com" "amazon.com"
+    "www.ebay.com" "ebay.com"
+    "www.etsy.com" "etsy.com"
+    "www.aliexpress.com" "aliexpress.com"
+    "www.walmart.com" "walmart.com"
+    "www.bestbuy.com" "bestbuy.com"
+
+)
+
+# ======= Utility Functions =======
+
+check_deps() {
+    local deps=(fzf timew hostess)
+    for cmd in "${deps[@]}"; do
+        command -v "$cmd" >/dev/null 2>&1 || {
+            echo "Error: '$cmd' not found." >&2
+            exit 1
+        }
+    done
+}
+
+set_tmux_status() {
+    local label="${1:-}"
+    if tmux info &>/dev/null; then
+        if [[ -z "$label" ]]; then
+            tmux set -g status-right ""
+        else
+            tmux set -g status-right "$label #(timew | awk '/^ *Total/ {print \$NF}')"
+            tmux set -g status-interval 5
+        fi
+    fi
+}
+
+block_hosts() {
+    for host in "${HOSTS[@]}"; do
+        hostess add "$host" 127.0.0.1 >/dev/null 2>&1 || true
+    done
+}
+
+unblock_hosts() {
+    for host in "${HOSTS[@]}"; do
+        hostess rm "$host" >/dev/null 2>&1 || true
+    done
+}
+
+# ======= Main =======
+
+check_deps
+
 selected=$(printf "%s\n" "${CATEGORIES[@]}" \
-    | fzf --margin=10% --bind 'q:abort' --ansi --layout=reverse)
+    | fzf --prompt="Select focus mode: " \
+          --margin=10% \
+          --border=rounded \
+          --layout=reverse \
+          --bind 'q:abort' \
+          --ansi)
+
 fzf_status=$?
+[[ $fzf_status -ne 0 || -z "$selected" ]] && exit 0
 
-if [[ $fzf_status -ne 0 || -z "$selected" ]]; then
-    exit 0
-fi
-
-tmux set -g status-interval 5
-
-if [[ "$selected" == "STOP" ]]; then
-    timew stop
-    tmux set -g status-right ""
-else
-    timew start "$selected"
-    tmux set -g status-right "$selected #(timew | awk '/^ *Total/ {print \$NF}')"
-fi
+case "$selected" in
+    STOP)
+        timew stop
+        set_tmux_status ""
+        block_hosts   # Restore blocking on stop
+        notify-send "Focus stopped" || true
+        ;;
+    WASTE)
+        timew start "$selected"
+        set_tmux_status "$selected"
+        unblock_hosts
+        notify-send "Mode: WASTE (distractions allowed)" || true
+        ;;
+    *)
+        timew start "$selected"
+        set_tmux_status "$selected"
+        block_hosts
+        notify-send "Mode: $selected (focus mode)" || true
+        ;;
+esac

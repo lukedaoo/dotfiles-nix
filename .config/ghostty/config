@@ -1,10 +1,10 @@
 font-family = "Comic Code"
 font-size = 18
 
-theme = ayu
+theme = Gruber Darker
 
 #background = 000000
-background-opacity = 0.5
+background-opacity = 0.8
 window-decoration = false
 
 # Disable default keybindings

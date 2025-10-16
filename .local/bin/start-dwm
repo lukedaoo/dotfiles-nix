@@ -12,6 +12,7 @@ dunst &
 xcompmgr &
 
 # playerctl with mpd
+mpd &
 mpDris2 &
 
 #start layout
