@@ -1,0 +1,23 @@
+#!/bin/bash
+
+current_branch=$(git branch --show-current)
+
+git pull --rebase origin "$current_branch"
+
+git status
+
+if git diff --quiet && git diff --cached --quiet; then
+    echo "No changes to commit."
+    exit 0
+fi
+
+read -p "Do you want to add and push all changes? (Y/n) " -n 1 -r
+echo    
+
+if [[ $REPLY =~ ^[Yy]$ ]] || [[ -z $REPLY ]]; then
+    git add .
+    
+    git push origin "$current_branch"
+else
+    echo "Aborted."
+fi
