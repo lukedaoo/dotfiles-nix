@@ -1,22 +1,52 @@
 #!/bin/bash
+set -e
+
+export GIT_TERMINAL_PROMPT=1
+export GPG_TTY=$(tty)
 
 current_branch=$(git branch --show-current)
+echo "Current branch: $current_branch"
 
-git pull --rebase origin "$current_branch"
+# Check for local changes
+if ! git diff --quiet || ! git diff --cached --quiet; then
+    echo "Local changes detected. Stashing before pull..."
+    git stash push -u -m "auto-stash-before-pull"
+    stash_applied=true
+else
+    stash_applied=false
+fi
+
+# Try to pull with rebase
+echo "Pulling latest changes from origin/$current_branch..."
+git pull --rebase origin "$current_branch" || {
+    echo "Rebase failed. Please resolve conflicts manually."
+    exit 1
+}
+
+# Restore stashed changes if any
+if [ "$stash_applied" = true ]; then
+    echo "Restoring your previous changes..."
+    git stash pop || {
+        echo "Warning: Some conflicts occurred when applying your stash."
+        echo "Resolve them manually and continue."
+    }
+fi
 
 git status
 
+# Check again for uncommitted changes
 if git diff --quiet && git diff --cached --quiet; then
     echo "No changes to commit."
     exit 0
 fi
 
 read -p "Do you want to add and push all changes? (Y/n) " -n 1 -r
-echo    
+echo
 
 if [[ $REPLY =~ ^[Yy]$ ]] || [[ -z $REPLY ]]; then
     git add .
-    
+    commit_message="${1:-YOLO commit}"
+    git commit -S -m "$commit_message"
     git push origin "$current_branch"
 else
     echo "Aborted."

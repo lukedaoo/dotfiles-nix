@@ -30,7 +30,7 @@ HOSTS=(
     "www.disneyplus.com" "disneyplus.com"
     "www.crunchyroll.com" "crunchyroll.com"
     "www.vimeo.com" "vimeo.com"
-    "www.nimot.tv" "nimo.tv"
+    "www.nimo.tv" "nimo.tv"
     # --- Discussion & forums ---
     "www.reddit.com" "reddit.com"
     "old.reddit.com"
