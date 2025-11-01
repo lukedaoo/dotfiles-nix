@@ -30,8 +30,8 @@ if [ "$stash_applied" = true ]; then
         echo "Warning: Some conflicts occurred when applying your stash."
         echo "Resolve them manually and continue."
     }
-fi
 
+fi
 git status
 
 # Check again for uncommitted changes

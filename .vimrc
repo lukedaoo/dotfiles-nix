@@ -1,4 +1,4 @@
-set clipboard+=unnamedplus
+set clipboard=unnamedplus
 set cmdheight=2
 set mouse="a
 set showmode
@@ -101,8 +101,8 @@ nnoremap <C-Right> :tabnext<CR>
 " === Delete without yanking ===
 nnoremap <leader>x "_x
 vnoremap <leader>x "_x
-nnoremap vd "_dd
 vnoremap vd "_d
+nnoremap vd "_dd
 
 " === Escape from insert ===
 inoremap jj <ESC>
