@@ -5,9 +5,9 @@ set -euo pipefail
 
 CATEGORIES=(
     "WORK"
+    "WORK_WASTE"
     "VIM"
-    "WASTE",
-    "WORK+WASTE"
+    "WASTE"
     "STOP"
 )
 
@@ -121,11 +121,11 @@ case "$selected" in
         unblock_hosts
         notify-send "Mode: WASTE (distractions allowed)" || true
         ;;
-    "WASTE+WORK")
+    WORK_WASTE)
         timew start "WORK"  # Track as WORK
-        set_tmux_status "WASTE+WORK"
-        unblock_hosts       # Allow distractions
-        notify-send "Mode: WASTE+WORK (working, distractions OK)" || true
+        set_tmux_status "WORK_WASTE"
+        unblock_hosts
+        notify-send "Mode: WORK_WASTE (working, distractions OK)" || true
         ;;
     *)
         timew start "$selected"

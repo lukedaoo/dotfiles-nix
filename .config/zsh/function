@@ -57,3 +57,69 @@ startService() {
 live_server() { 
     npx live-server $1
 }
+
+ff() {
+    query=""
+    use_grep=0
+    include_args=""
+
+    # Parse arguments
+    while [ $# -gt 0 ]; do
+        case "$1" in
+            --simple)
+                use_grep=1
+                shift
+                ;;
+            --ext)
+                if [ $# -lt 2 ]; then
+                    echo "Error: --ext requires a value (e.g. --ext js,tsx)" >&2
+                    return 1
+                fi
+                exts="$2"
+                shift 2
+
+                # Build --include patterns
+                IFS=,
+                for ext in $exts; do
+                    # skip empty parts
+                    [ -z "$ext" ] && continue
+                    include_args="$include_args --include=*.${ext#.} "  # remove dot if user wrote .js
+                done
+                unset IFS
+                ;;
+            --*)
+                echo "Unknown option: $1" >&2
+                return 1
+                ;;
+            *)
+                query="$1"
+                shift
+                break
+                ;;
+        esac
+    done
+
+    if [ -z "$query" ]; then
+        echo "Usage: ff [--simple] [--ext js,tsx,css] <search-pattern>" >&2
+        return 1
+    fi
+
+    if [ "$use_grep" -eq 1 ]; then
+        # grep mode — list matching files
+        grep -ril --color=never "$query" . \
+            --exclude-dir=node_modules \
+            --exclude-dir=build \
+            --exclude-dir=.git \
+            $include_args 2>/dev/null
+    else
+        # default: ripgrep + fzf
+        rg --files-with-matches --no-messages "$query" . \
+            $include_args 2>/dev/null |
+        fzf --multi \
+            --height 40% \
+            --border \
+            --preview "grep -H -n --color=always '$query' {}" \
+            --preview-window up:60% \
+            --nth -1
+    fi
+}
