@@ -1,11 +1,11 @@
 #!/bin/sh
-
 HEAD=$(cal| head -n1)
 TODAY=$(date '+%-e')
 BODY=$(cal | tail -n7 | sed -z "s|$TODAY|<u><b><span color='red'>$TODAY</span></b></u>|1")
-
 case $BUTTON in
-	1) notify-send "$HEAD" "$BODY"
+1) notify-send "$HEAD" "$BODY"
 esac
-#date "+%b %d (%a) %y %h:%m:%s"
-date "+%m-%d-%Y %H:%M:%S"
+
+DAY=$(date '+%A')
+DATE=$(date '+%-d %b, %Y - %H:%M:%S')
+echo "$DAY $DATE"
