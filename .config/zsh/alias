@@ -35,3 +35,4 @@ alias l1='ls -1'
 alias shutdown='shutdown -h now'
 
 alias tls="tmux-ls"
+alias rm="trash"
