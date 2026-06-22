@@ -29,8 +29,17 @@ if [ -f ~/.fehbg ] ; then
   ~/.fehbg &
 fi
 
-#start session
-/usr/local/bin/dwm 
+if [ -z "$DBUS_SESSION_BUS_ADDRESS" ]; then
+    eval $(dbus-launch --sh-syntax --exit-with-session)
+fi
+
+export XDG_CURRENT_DESKTOP=GNOME
+export XDG_MENU_PREFIX=gnome-
+
+/usr/lib/xdg-desktop-portal &
+/usr/lib/xdg-desktop-portal-gtk &
+
+/usr/local/bin/dwm > ~/.dwm.log 2>&1
 
 # echo "$(date): Starting dwm" >> /home/$USER/.logs/dwm/$(date +%Y-%m-%d_%H.dwm.log)
 # /usr/local/bin/dwm >> /home/$USER/.logs/dwm/$(date +%Y-%m-%d_%H.dwm.log) 2>&1
