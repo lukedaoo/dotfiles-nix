@@ -72,6 +72,10 @@ bindsym $alt+F11 fullscreen toggle
 
 bindsym $mod+Tab workspace back_and_forth
 
+# scratchpad hide/show
+bindsym $alt+h move scratchpad
+bindsym $alt+s scratchpad show
+
 # ---------------------------------------------------------------------------
 # apps
 # ---------------------------------------------------------------------------
@@ -99,9 +103,9 @@ bindsym $mod+shift+equal gaps inner current set 0
 # ---------------------------------------------------------------------------
 # media / brightness / mic keys
 # ---------------------------------------------------------------------------
-bindsym XF86AudioLowerVolume exec --no-startup-id amixer set Master 5%-
-bindsym XF86AudioRaiseVolume exec --no-startup-id amixer set Master 5%+
-bindsym XF86AudioMute        exec --no-startup-id amixer set Master toggle
+bindsym XF86AudioLowerVolume exec --no-startup-id amixer set Master 5%- && pkill -RTMIN+20 i3blocks
+bindsym XF86AudioRaiseVolume exec --no-startup-id amixer set Master 5%+ && pkill -RTMIN+20 i3blocks
+bindsym XF86AudioMute        exec --no-startup-id amixer set Master toggle && pkill -RTMIN+20 i3blocks
 bindsym XF86AudioMicMute     exec --no-startup-id amixer set Capture toggle
 bindsym XF86AudioNext        exec --no-startup-id playerctl next
 bindsym XF86AudioPrev        exec --no-startup-id playerctl previous
@@ -164,7 +168,7 @@ assign [class="^teams-for-linux$"] workspace number 4
 # if you're porting your existing dwmblocks scripts.
 # ---------------------------------------------------------------------------
 bar {
-    status_command i3status
+    status_command i3blocks
     position top
     font pango:Comic Code 12, Font Awesome 6 Free 12
     colors {

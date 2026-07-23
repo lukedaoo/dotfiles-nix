@@ -1,9 +1,21 @@
 #!/bin/sh
-HEAD=$(cal| head -n1)
 TODAY=$(date '+%-e')
-BODY=$(cal | tail -n7 | sed -z "s|$TODAY|<u><b><span color='red'>$TODAY</span></b></u>|1")
+HEAD="$(date '+%B %Y')"
+
+# tail -n +2 strips each month's "Month Year" header line
+PREV=$(cal -m $(date -d 'last month' '+%m %Y') | tail -n +2)
+CURR=$(cal -m | tail -n +2 | sed -z "s|\b$TODAY\b|<u><b><span color='red'>$TODAY</span></b></u>|1")
+NEXT=$(cal -m $(date -d 'next month' '+%m %Y') | tail -n +2)
+
+BODY="<tt><b>$(date -d 'last month' '+%B')</b>
+$PREV
+<b>$(date '+%B')</b>
+$CURR
+<b>$(date -d 'next month' '+%B')</b>
+$NEXT</tt>"
+
 case $BUTTON in
-1) notify-send "$HEAD" "$BODY"
+    1) notify-send "$HEAD" "$BODY" ;;
 esac
 
 DAY=$(date '+%A')
