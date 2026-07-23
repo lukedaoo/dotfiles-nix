@@ -1,0 +1,37 @@
+# i3blocks config — ported from ~/.config/suckless/dwmblocks/blocks.def.h
+# Reuses the same ~/.local/bin/statusbar/sb-* scripts.
+# Order top->bottom = left->right on the bar.
+# signal=N  -> instant refresh via: pkill -RTMIN+N i3blocks
+#
+# NOTE: sb-* scripts read $BUTTON (dwmblocks). i3blocks exports $BLOCK_BUTTON,
+# so each command re-exports BUTTON=$BLOCK_BUTTON to make clicks work
+# without editing the shared scripts.
+
+separator=true
+separator_block_width=15
+markup=none
+
+[netspeed]
+command=BUTTON=$BLOCK_BUTTON ~/.local/bin/statusbar/sb-netspeed
+interval=5
+signal=17
+
+[music]
+command=BUTTON=$BLOCK_BUTTON ~/.local/bin/statusbar/sb-music
+interval=3
+signal=30
+
+[volume]
+command=BUTTON=$BLOCK_BUTTON ~/.local/bin/statusbar/sb-volume
+interval=3
+signal=20
+
+[date]
+command=BUTTON=$BLOCK_BUTTON ~/.local/bin/statusbar/sb-date
+interval=1
+signal=25
+
+[user]
+command=BUTTON=$BLOCK_BUTTON ~/.local/bin/statusbar/sb-user
+interval=once
+signal=26
