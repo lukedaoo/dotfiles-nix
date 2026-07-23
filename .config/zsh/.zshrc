@@ -17,4 +17,3 @@ z_source "f"
 
 z_plug "zsh-users/zsh-completions"
 z_plug "zsh-users/zsh-autosuggestions"
-

@@ -1,188 +1,182 @@
-# i3 config translated from DWM setup
+# i3 config — ported from dwm config.h
+# Place at ~/.config/i3/config
 
-# Modifiers
 set $mod Mod4
 set $alt Mod1
 
-# Appearance
-font pango:Comic Mono, Font Awesome 6 Free Regular 12
+# ---------------------------------------------------------------------------
+# appearance
+# ---------------------------------------------------------------------------
+font pango:Comic Code 12, Font Awesome 6 Free 12
 
-# Colors (ayu dark)
-set $bg       #0A0E14
-set $bg2      #1D202F
-set $fg       #F9F9F9
-set $fg2      #CBCCC6
-set $accent   #2d2c2b
-
-# Window borders
+# dwm: borderpx=1, gappx=5
 default_border pixel 1
 default_floating_border pixel 1
-
-# Gaps
 gaps inner 5
-gaps outer 5
+gaps outer 0
+smart_gaps on
 
-# Bar
+# ayu dark palette (col_gray1/2/3/4, col_cyan from your config)
+set $bg      #0A0E14
+set $border  #1D202F
+set $fg      #F9F9F9
+set $fg_sel  #CBCCC6
+set $sel     #2d2c2b
+
+#                       border  backgr. text     indicator child_border
+client.focused          $sel    $sel    $fg_sel  $sel      $sel
+client.focused_inactive $border $bg     $fg      $border   $border
+client.unfocused        $border $bg     $fg      $border   $border
+client.urgent           #900000 #900000 $fg_sel  #900000   #900000
+
+# ---------------------------------------------------------------------------
+# terminal / launcher
+# ---------------------------------------------------------------------------
+set $term ghostty
+bindsym $mod+Return exec $term
+bindsym $mod+space exec dmenu_run -m 0 -fn "Comic Mono:style=Normal:size=12" \
+    -nb "$bg" -nf "$fg" -sb "$sel" -sf "$fg_sel"
+
+# ---------------------------------------------------------------------------
+# window focus / movement (dwm: focusstackvis j/k)
+# ---------------------------------------------------------------------------
+bindsym $mod+j focus down
+bindsym $mod+k focus up
+
+# no equivalent for focusstackhid (hidden-client stack cycling) — dropped
+
+bindsym $mod+q kill
+
+# ---------------------------------------------------------------------------
+# resize (dwm: setmfact h/l — approximated as direct width resize)
+# ---------------------------------------------------------------------------
+bindsym $mod+h resize shrink width 40 px or 5 ppt
+bindsym $mod+l resize grow width 40 px or 5 ppt
+
+# incnmaster (alt+r / alt+shift+r) — no master-count concept in i3, dropped
+# zoom (mod+shift+Return, swap to master) — no master area in i3, dropped
+
+# ---------------------------------------------------------------------------
+# layouts (dwm: tile/floating/monocle/centeredmaster/centeredfloatingmaster)
+# ---------------------------------------------------------------------------
+bindsym $alt+t layout splith
+bindsym $alt+space layout toggle split
+bindsym $alt+f layout tabbed
+# centeredmaster ($alt+u) / centeredfloatingmaster ($alt+o) — no i3 equivalent
+bindsym $alt+shift+space floating toggle
+bindsym $alt+F11 fullscreen toggle
+
+bindsym $mod+Tab workspace back_and_forth
+
+# ---------------------------------------------------------------------------
+# apps
+# ---------------------------------------------------------------------------
+bindsym $mod+e exec thunar
+bindsym $mod+z exec cboomer
+bindsym $mod+n exec take_note
+bindsym $mod+F4 exec flameshot-fix
+bindsym $mod+Print exec flameshot-fix
+
+# ---------------------------------------------------------------------------
+# monitors (dwm: focusmon/tagmon)
+# ---------------------------------------------------------------------------
+bindsym $mod+comma focus output left
+bindsym $mod+period focus output right
+bindsym $mod+shift+comma move container to output left
+bindsym $mod+shift+period move container to output right
+
+# ---------------------------------------------------------------------------
+# gaps (dwm: setgaps minus/equal/shift+equal)
+# ---------------------------------------------------------------------------
+bindsym $mod+minus gaps inner current minus 5
+bindsym $mod+equal gaps inner current plus 5
+bindsym $mod+shift+equal gaps inner current set 0
+
+# ---------------------------------------------------------------------------
+# media / brightness / mic keys
+# ---------------------------------------------------------------------------
+bindsym XF86AudioLowerVolume exec --no-startup-id amixer set Master 5%-
+bindsym XF86AudioRaiseVolume exec --no-startup-id amixer set Master 5%+
+bindsym XF86AudioMute        exec --no-startup-id amixer set Master toggle
+bindsym XF86AudioMicMute     exec --no-startup-id amixer set Capture toggle
+bindsym XF86AudioNext        exec --no-startup-id playerctl next
+bindsym XF86AudioPrev        exec --no-startup-id playerctl previous
+bindsym XF86AudioPlay        exec --no-startup-id playerctl play-pause
+bindsym XF86MonBrightnessUp   exec --no-startup-id light -A 10
+bindsym XF86MonBrightnessDown exec --no-startup-id light -U 10
+
+# ---------------------------------------------------------------------------
+# scratchpad (dwm: show/hide — showall has no equivalent)
+# ---------------------------------------------------------------------------
+bindsym $alt+s scratchpad show
+bindsym $alt+h move scratchpad
+
+# ---------------------------------------------------------------------------
+# workspaces (dwm: TAGKEYS 1-9 — view/tag only; toggleview/toggletag dropped,
+# they rely on dwm's multi-tag-per-client model which i3 workspaces don't have)
+# ---------------------------------------------------------------------------
+bindsym $alt+1 workspace number 1
+bindsym $alt+2 workspace number 2
+bindsym $alt+3 workspace number 3
+bindsym $alt+4 workspace number 4
+bindsym $alt+5 workspace number 5
+bindsym $alt+6 workspace number 6
+bindsym $alt+7 workspace number 7
+bindsym $alt+8 workspace number 8
+bindsym $alt+9 workspace number 9
+
+bindsym $alt+shift+1 move container to workspace number 1
+bindsym $alt+shift+2 move container to workspace number 2
+bindsym $alt+shift+3 move container to workspace number 3
+bindsym $alt+shift+4 move container to workspace number 4
+bindsym $alt+shift+5 move container to workspace number 5
+bindsym $alt+shift+6 move container to workspace number 6
+bindsym $alt+shift+7 move container to workspace number 7
+bindsym $alt+shift+8 move container to workspace number 8
+bindsym $alt+shift+9 move container to workspace number 9
+
+# ---------------------------------------------------------------------------
+# quit
+# ---------------------------------------------------------------------------
+bindsym $mod+shift+minus exit
+
+# ---------------------------------------------------------------------------
+# mouse (dwm: MODKEY+drag move/resize on ClkClientWin)
+# ---------------------------------------------------------------------------
+floating_modifier $mod
+
+# ---------------------------------------------------------------------------
+# app -> workspace assignment (dwm: rules[] tag mask)
+# ---------------------------------------------------------------------------
+for_window [class="^Gimp$"] floating enable
+
+assign [class="^Google-chrome$"]   workspace number 2
+assign [class="^Microsoft-edge$"]  workspace number 2
+assign [class="^firefox$"]         workspace number 2
+assign [class="^LibreWolf$"]       workspace number 2
+assign [class="^Ferdium$"]         workspace number 8
+assign [class="^org.mozilla.Thunderbird$"] workspace number 7
+assign [class="^jetbrains-idea-ce$"] workspace number 6
+assign [class="^Slack$"]           workspace number 3
+assign [class="^discord$"]         workspace number 4
+assign [class="^teams-for-linux$"] workspace number 4
+
+# ---------------------------------------------------------------------------
+# bar — dwmblocks will NOT feed this; swap status_command for i3blocks/polybar
+# if you're porting your existing dwmblocks scripts.
+# ---------------------------------------------------------------------------
 bar {
+    status_command i3status
     position top
-    font pango:Comic Mono 12, Font Awesome 6 Free Regular 12
-    status_command i3blocks  # Use i3blocks for compatibility with dwmblocks
+    font pango:Comic Code 12, Font Awesome 6 Free 12
     colors {
         background $bg
         statusline $fg
-        separator $fg2
-        focused_workspace $fg $accent $fg2
-        active_workspace $fg $bg2 $fg2
-        inactive_workspace $fg $bg $fg2
-        urgent_workspace $fg2 $accent $fg
+        separator  $border
+
+        focused_workspace  $sel    $sel    $fg_sel
+        active_workspace   $border $bg     $fg
+        inactive_workspace $border $bg     $fg
+        urgent_workspace    #900000 #900000 $fg_sel
     }
 }
-
-# Workspaces
-set $ws1 "1"
-set $ws2 "2"
-set $ws3 "3"
-set $ws4 "4"
-set $ws5 "5"
-set $ws6 "6"
-set $ws7 "7"
-set $ws8 "8"
-set $ws9 "9"
-
-for_window [class=".*"] layout splith
-for_window [class="Gimp"] floating enable
-
-# App assignments
-assign [class="Google-chrome"] $ws2
-assign [class="Microsoft-edge"] $ws2
-assign [class="Firefox"] $ws2
-assign [class="LibreWolf"] $ws2
-assign [class="Ferdium"] $ws8
-assign [class="Thunderbird"] $ws7
-assign [class="jetbrains-idea-ce"] $ws6
-assign [class="kitty"] $ws1
-assign [class="Slack"] $ws3
-assign [class="discord"] $ws4
-assign [class="teams-for-linux"] $ws4
-
-# Floating rules
-for_window [class="Gimp"] floating enable
-
-# Keybindings
-bindsym $mod+space exec dmenu_run -fn "Comic Mono:size=12" -nb "$bg" -nf "$fg" -sb "$accent" -sf "$fg2"
-bindsym $mod+Return exec kitty
-bindsym $mod+b bar mode toggle
-
-# Focus
-bindsym $mod+j focus down
-bindsym $mod+k focus up
-bindsym $mod+Shift+j move to scratchpad  
-
-# Master area control
-bindsym $alt+r layout splitv  
-bindsym $alt+Shift+r layout splith  
-bindsym $mod+h resize shrink width 5 px or 5 ppt  
-bindsym $mod+l resize grow width 5 px or 5 ppt
-
-# Zoom
-bindsym $mod+Shift+Return move container to position 0  
-
-# Kill
-bindsym $mod+q kill
-
-# Layouts
-bindsym $alt+t layout splith  
-bindsym $alt+space floating toggle  
-bindsym $alt+f fullscreen toggle
-bindsym $alt+u layout splitv  
-bindsym $alt+o floating toggle  
-bindsym $alt+Shift+f layout default  
-
-# Workspace navigation
-bindsym $alt+1 workspace $ws1
-bindsym $alt+2 workspace $ws2
-bindsym $alt+3 workspace $ws3
-bindsym $alt+4 workspace $ws4
-bindsym $alt+5 workspace $ws5
-bindsym $alt+6 workspace $ws6
-bindsym $alt+7 workspace $ws7
-bindsym $alt+8 workspace $ws8
-bindsym $alt+9 workspace $ws9
-
-# Toggle workspace view
-bindsym $alt+Control+1 workspace toggle $ws1
-bindsym $alt+Control+2 workspace toggle $ws2
-bindsym $alt+Control+3 workspace toggle $ws3
-bindsym $alt+Control+4 workspace toggle $ws4
-bindsym $alt+Control+5 workspace toggle $ws5
-bindsym $alt+Control+6 workspace toggle $ws6
-bindsym $alt+Control+7 workspace toggle $ws7
-bindsym $alt+Control+8 workspace toggle $ws8
-bindsym $alt+Control+9 workspace toggle $ws9
-
-# Move container to workspace
-bindsym $alt+Shift+1 move container to workspace $ws1
-bindsym $alt+Shift+2 move container to workspace $ws2
-bindsym $alt+Shift+3 move container to workspace $ws3
-bindsym $alt+Shift+4 move container to workspace $ws4
-bindsym $alt+Shift+5 move container to workspace $ws5
-bindsym $alt+Shift+6 move container to workspace $ws6
-bindsym $alt+Shift+7 move container to workspace $ws7
-bindsym $alt+Shift+8 move container to workspace $ws8
-bindsym $alt+Shift+9 move container to workspace $ws9
-
-# Toggle tags
-bindsym $alt+Control+Shift+1 move container to workspace $ws1; workspace $ws1
-bindsym $alt+Control+Shift+2 move container to workspace $ws2; workspace $ws2
-bindsym $alt+Control+Shift+3 move container to workspace $ws3; workspace $ws3
-bindsym $alt+Control+Shift+4 move container to workspace $ws4; workspace $ws4
-bindsym $alt+Control+Shift+5 move container to workspace $ws5; workspace $ws5
-bindsym $alt+Control+Shift+6 move container to workspace $ws6; workspace $ws6
-bindsym $alt+Control+Shift+7 move container to workspace $ws7; workspace $ws7
-bindsym $alt+Control+Shift+8 move container to workspace $ws8; workspace $ws8
-bindsym $alt+Control+Shift+9 move container to workspace $ws9; workspace $ws9
-
-# View all workspaces
-bindsym $mod+0 workspace back_and_forth  # Approximate view all tags
-bindsym $mod+Shift+0 move container to workspace back_and_forth  # Approximate tag all
-
-# Multi-monitor
-bindsym $mod+comma focus output left
-bindsym $mod+period focus output right
-bindsym $mod+Shift+comma move workspace to output left
-bindsym $mod+Shift+period move workspace to output right
-
-# Gaps adjustment
-bindsym $mod+minus gaps inner current minus 1
-bindsym $mod+equal gaps inner current plus 1
-bindsym $mod+Shift+equal gaps inner current set 0
-
-# Volume
-bindsym XF86AudioLowerVolume exec amixer set Master 5%-
-bindsym XF86AudioRaiseVolume exec amixer set Master 5%+
-bindsym XF86AudioMute exec amixer set Master toggle
-bindsym XF86AudioMicMute exec amixer set Capture toggle
-
-# Brightness
-bindsym XF86MonBrightnessUp exec light -A 10
-bindsym XF86MonBrightnessDown exec light -U 10
-
-# Media keys
-bindsym XF86AudioNext exec playerctl next
-bindsym XF86AudioPrev exec playerctl previous
-bindsym XF86AudioPlay exec playerctl play-pause
-
-# Scratchpad (approximate show/hide)
-bindsym $alt+s move scratchpad
-bindsym $alt+Shift+s scratchpad show
-bindsym $alt+h move scratchpad
-
-# Screenshot
-bindsym $mod+F4 exec flameshot gui
-bindsym Print exec flameshot gui
-
-# Take note
-bindsym $mod+n exec take_note
-
-# Exit
-bindsym $mod+Shift+minus exec i3-msg exit
