@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+query=""
+use_grep=0
+rg_args=()
+grep_args=()
+while [ $# -gt 0 ]; do
+	case "$1" in
+		(--simple) use_grep=1
+			shift ;;
+		(--ext) if [ $# -lt 2 ]; then
+				echo "Error: --ext requires a value (e.g. --ext js,tsx)" >&2
+				exit 1
+			fi
+			IFS=','
+			for ext in $2; do
+				[ -z "$ext" ] && continue
+				clean_ext="${ext#.}"
+				rg_args+=(-g "*.${clean_ext}")
+				grep_args+=("--include=*.${clean_ext}")
+			done
+			unset IFS
+			shift 2 ;;
+		(--*) echo "Unknown option: $1" >&2
+			exit 1 ;;
+		(*) query="$1"
+			shift
+			break ;;
+	esac
+done
+if [ -z "$query" ]; then
+	echo "Usage: find_files [--simple] [--ext js,tsx,css] <search-pattern>" >&2
+	exit 1
+fi
+if [ "$use_grep" -eq 1 ]; then
+	grep -ril --color=never "$query" . --exclude-dir=node_modules --exclude-dir=build --exclude-dir=.git "${grep_args[@]}" 2>/dev/null
+else
+	rg --files-with-matches --no-messages "$query" . "${rg_args[@]}" 2>/dev/null | fzf --multi --height 40% --border --preview "grep -H -n --color=always '$query' {}" --preview-window up:60% --nth -1
+fi

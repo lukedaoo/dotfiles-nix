@@ -11,19 +11,61 @@ FZF_FOLDERS=(
 
 # Define subdirectories and files to ignore
 FZF_IGNORE_DIRS=(
+  # build / deps
   "node_modules"
-  ".git"
-  "venv"
   "dist"
   "build"
+  "out"
+  "target"
+  "vendor"
+  "coverage"
+  ".nyc_output"
   "__pycache__"
-  ".cache"
+  ".pytest_cache"
+  ".mypy_cache"
+  ".tox"
+  # frameworks
   ".next"
   ".nuxt"
-  "out"
+  ".gradle"
+  ".android"
+  ".conda"
+  # vcs
+  ".git"
+  # venvs
+  "venv"
+  ".venv"
+  "env"
+  "site-packages"
+  # lang toolchains
+  ".cargo"
+  ".rustup"
+  ".npm"
+  ".yarn"
+  ".pnpm-store"
+  ".go"
+  "go"
+  # app data / browser profiles
+  ".mozilla"
+  ".thunderbird"
+  ".gnome"
+  ".dbus"
+  ".pulse"
+  ".steam"
+  ".wine"
+  ".java"
+  # large local share dirs
+  ".local"
+  # system / runtime
+  "snap"
+  "proc"
+  # media
   "photos"
   "videos"
   "music"
+  "Pictures"
+  "Music"
+  "Videos"
 )
 
 FZF_IGNORE_FILES=(
@@ -56,23 +98,23 @@ fzf_custom() {
   check_command "find" || return 1
   check_command "nvim" || return 1
 
-  # Ignore patterns
-  local ignore_patterns=()
-  for dir in "${FZF_IGNORE_DIRS[@]}"; do
-    ignore_patterns+=(-not -path "*/${dir}/*")
-  done
-  for file in "${FZF_IGNORE_FILES[@]}"; do
-    ignore_patterns+=(-not -name "${file}")
+  # Build prune expression — stops find from descending into ignored dirs
+  local prune_expr=(-name "${FZF_IGNORE_DIRS[1]}")
+  for dir in "${FZF_IGNORE_DIRS[@]:1}"; do
+    prune_expr+=(-o -name "$dir")
   done
 
-  # Size filters
-  local size_filters=(-size +100c -size -100M)
+  # File exclusions and size filters applied only to non-pruned results
+  local file_filters=(-size +100c -size -100M)
+  for f in "${FZF_IGNORE_FILES[@]}"; do
+    file_filters+=(-not -name "$f")
+  done
 
   # Run fzf
   local selected_item
-  selected_item=$(find "${FZF_FOLDERS[@]}" \( -type d -o \( -type f "${size_filters[@]}" \) \) \
-    "${ignore_patterns[@]}" 2>/dev/null |
-    fzf --height 40% --layout reverse --border --preview "$preview_cmd" 2>/dev/null)
+  selected_item=$(find "$PWD" \( "${prune_expr[@]}" \) -prune -o \
+    \( -type f "${file_filters[@]}" \) -print 2>/dev/null |
+    fzf --height 40% --layout reverse --border 2>/dev/null)
 
     # Handle selection
     if [[ -n "$selected_item" ]]; then

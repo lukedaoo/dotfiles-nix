@@ -6,3 +6,14 @@ bindkey -s '^e' 'ranger^M'
 bindkey -s '^o' '$EDITOR^M'
 bindkey -s '' 'f^M'
 
+bindkey -M viins '^[[H' beginning-of-line
+bindkey -M vicmd '^[[H' beginning-of-line
+bindkey -M viins '^[[F' end-of-line
+bindkey -M vicmd '^[[F' end-of-line
+
+autoload -U edit-command-line
+zle -N edit-command-line
+
+bindkey '^xe' edit-command-line
+bindkey '^x^e' edit-command-line
+
