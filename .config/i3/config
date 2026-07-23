@@ -22,9 +22,10 @@ set $border  #1D202F
 set $fg      #F9F9F9
 set $fg_sel  #CBCCC6
 set $sel     #2d2c2b
+set $accent  #E6B450
 
 #                       border  backgr. text     indicator child_border
-client.focused          $sel    $sel    $fg_sel  $sel      $sel
+client.focused          $border $accent $bg      $accent   $border
 client.focused_inactive $border $bg     $fg      $border   $border
 client.unfocused        $border $bg     $fg      $border   $border
 client.urgent           #900000 #900000 $fg_sel  #900000   #900000
@@ -59,9 +60,12 @@ bindsym $mod+l resize grow width 40 px or 5 ppt
 # ---------------------------------------------------------------------------
 # layouts (dwm: tile/floating/monocle/centeredmaster/centeredfloatingmaster)
 # ---------------------------------------------------------------------------
+workspace_layout tabbed
 bindsym $alt+t layout splith
 bindsym $alt+space layout toggle split
-bindsym $alt+f layout tabbed
+bindsym $alt+f layout toggle tabbed split
+bindsym $mod+Left focus left
+bindsym $mod+Right focus right
 # centeredmaster ($alt+u) / centeredfloatingmaster ($alt+o) — no i3 equivalent
 bindsym $alt+shift+space floating toggle
 bindsym $alt+F11 fullscreen toggle
@@ -104,12 +108,6 @@ bindsym XF86AudioPrev        exec --no-startup-id playerctl previous
 bindsym XF86AudioPlay        exec --no-startup-id playerctl play-pause
 bindsym XF86MonBrightnessUp   exec --no-startup-id light -A 10
 bindsym XF86MonBrightnessDown exec --no-startup-id light -U 10
-
-# ---------------------------------------------------------------------------
-# scratchpad (dwm: show/hide — showall has no equivalent)
-# ---------------------------------------------------------------------------
-bindsym $alt+s scratchpad show
-bindsym $alt+h move scratchpad
 
 # ---------------------------------------------------------------------------
 # workspaces (dwm: TAGKEYS 1-9 — view/tag only; toggleview/toggletag dropped,

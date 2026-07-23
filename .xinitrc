@@ -1,6 +1,6 @@
 #!/bin/bash
 
-session=${1:-dwm}
+session=${1:-i3}
 
 xrdb ~/.Xresources
 case $session in 
