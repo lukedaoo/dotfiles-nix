@@ -3,8 +3,8 @@ font-size = 18
 
 theme = Gruber Darker
 
-#background = 000000
-background-opacity = 0.8
+background = 000000
+#background-opacity = 0.8
 window-decoration = false
 
 # Disable default keybindings

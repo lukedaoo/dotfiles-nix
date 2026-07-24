@@ -35,8 +35,9 @@ client.urgent           #900000 #900000 $fg_sel  #900000   #900000
 # ---------------------------------------------------------------------------
 set $term ghostty
 bindsym $mod+Return exec $term
-bindsym $mod+space exec dmenu_run -m 0 -fn "Comic Mono:style=Normal:size=12" \
+bindsym $mod+space exec dmenu_run_focused -fn "Comic Mono:style=Normal:size=12" \
     -nb "$bg" -nf "$fg" -sb "$sel" -sf "$fg_sel"
+mouse_warping none
 
 # ---------------------------------------------------------------------------
 # window focus / movement (dwm: focusstackvis j/k)
@@ -150,18 +151,18 @@ floating_modifier $mod
 # ---------------------------------------------------------------------------
 # app -> workspace assignment (dwm: rules[] tag mask)
 # ---------------------------------------------------------------------------
-for_window [class="^Gimp$"] floating enable
-
-assign [class="^Google-chrome$"]   workspace number 2
-assign [class="^Microsoft-edge$"]  workspace number 2
-assign [class="^firefox$"]         workspace number 2
-assign [class="^LibreWolf$"]       workspace number 2
-assign [class="^Ferdium$"]         workspace number 8
-assign [class="^org.mozilla.Thunderbird$"] workspace number 7
-assign [class="^jetbrains-idea-ce$"] workspace number 6
-assign [class="^Slack$"]           workspace number 3
-assign [class="^discord$"]         workspace number 4
-assign [class="^teams-for-linux$"] workspace number 4
+# for_window [class="^Gimp$"] floating enable
+#
+# assign [class="^Google-chrome$"]   workspace number 2
+# assign [class="^Microsoft-edge$"]  workspace number 2
+# assign [class="^firefox$"]         workspace number 2
+# assign [class="^LibreWolf$"]       workspace number 2
+# assign [class="^Ferdium$"]         workspace number 8
+# assign [class="^org.mozilla.Thunderbird$"] workspace number 7
+# assign [class="^jetbrains-idea-ce$"] workspace number 6
+# assign [class="^Slack$"]           workspace number 3
+# assign [class="^discord$"]         workspace number 4
+# assign [class="^teams-for-linux$"] workspace number 4
 
 # ---------------------------------------------------------------------------
 # bar — dwmblocks will NOT feed this; swap status_command for i3blocks/polybar
