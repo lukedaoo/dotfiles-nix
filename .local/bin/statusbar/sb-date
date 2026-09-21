@@ -1,21 +1,22 @@
 #!/bin/sh
 TODAY=$(date '+%-e')
 HEAD="$(date '+%B %Y')"
+FIRST=$(date '+%Y-%m-01')
 
 # tail -n +2 strips each month's "Month Year" header line
-PREV=$(cal -m $(date -d 'last month' '+%m %Y') | tail -n +2)
+PREV=$(cal -m $(date -d "$FIRST -1 month" '+%m %Y') | tail -n +2)
 CURR=$(cal -m | tail -n +2 | sed -z "s|\b$TODAY\b|<u><b><span color='red'>$TODAY</span></b></u>|1")
-NEXT=$(cal -m $(date -d 'next month' '+%m %Y') | tail -n +2)
+NEXT=$(cal -m $(date -d "$FIRST +1 month" '+%m %Y') | tail -n +2)
 
-BODY="<tt><b>$(date -d 'last month' '+%B')</b>
+BODY="<tt><b>$(date -d "$FIRST -1 month" '+%B')</b>
 $PREV
 <b>$(date '+%B')</b>
 $CURR
-<b>$(date -d 'next month' '+%B')</b>
+<b>$(date -d "$FIRST +1 month" '+%B')</b>
 $NEXT</tt>"
 
 case $BUTTON in
-    1) notify-send "$HEAD" "$BODY" ;;
+    1) notify-send -r 90210 "$HEAD" "$BODY" ;;
 esac
 
 DAY=$(date '+%A')
