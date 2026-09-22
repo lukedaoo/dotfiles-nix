@@ -1,0 +1,70 @@
+#!/usr/bin/env bash
+# Safe cache cleanup: pacman, yay, ~/.cache
+# Keeps recent pkg versions (rollback safety) and skips live/lock-held cache dirs.
+set -euo pipefail
+
+DRY_RUN=0
+[[ "${1:-}" == "-n" || "${1:-}" == "--dry-run" ]] && DRY_RUN=1
+
+run() {
+    if [[ $DRY_RUN -eq 1 ]]; then
+        echo "[dry-run] $*"
+    else
+        "$@"
+    fi
+}
+
+echo "== pacman cache (/var/cache/pacman/pkg) =="
+if command -v paccache >/dev/null; then
+    # -k3: keep 3 newest versions of installed pkgs (rollback safety)
+    run sudo paccache -rk3
+    # -k0 uninstalled: keep 0 versions of pkgs no longer installed, but -u -k1 is safer default
+    run sudo paccache -ruk1
+else
+    echo "paccache not found, install pacman-contrib. skip." >&2
+fi
+
+echo "== yay cache (~/.cache/yay) =="
+if command -v yay >/dev/null; then
+    run yay -Sc --noconfirm
+else
+    echo "yay not found, skip." >&2
+fi
+
+echo "== ~/.cache (general) =="
+# Only prune files untouched 30+ days, and skip dirs whose deletion can brick
+# running sessions/apps: browser profiles, gpg, keyring, fontconfig, mesa shaders,
+# systemd/dconf state.
+CACHE_DIR="$HOME/.cache"
+SKIP_DIRS=(
+    "$CACHE_DIR/mozilla"
+    "$CACHE_DIR/google-chrome"
+    "$CACHE_DIR/chromium"
+    "$CACHE_DIR/BraveSoftware"
+    "$CACHE_DIR/fontconfig"
+    "$CACHE_DIR/mesa_shader_cache"
+    "$CACHE_DIR/gstreamer-1.0"
+    "$CACHE_DIR/dconf"
+    "$CACHE_DIR/keyring"
+)
+
+echo "current size: $(du -sh "$CACHE_DIR" 2>/dev/null | cut -f1)"
+
+FIND_ARGS=("$CACHE_DIR" -type f -mtime +30)
+for d in "${SKIP_DIRS[@]}"; do
+    FIND_ARGS+=(-not -path "$d/*")
+done
+
+if [[ $DRY_RUN -eq 1 ]]; then
+    echo "[dry-run] would remove files older than 30d (excluding live app dirs):"
+    find "${FIND_ARGS[@]}" -print | head -50
+    n=$(find "${FIND_ARGS[@]}" | wc -l)
+    echo "... total $n files"
+else
+    find "${FIND_ARGS[@]}" -delete
+    # drop now-empty dirs, but never touch top-level ~/.cache itself
+    find "$CACHE_DIR" -mindepth 1 -type d -empty -delete 2>/dev/null || true
+fi
+
+echo "new size: $(du -sh "$CACHE_DIR" 2>/dev/null | cut -f1)"
+echo "done."
