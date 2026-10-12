@@ -1,28 +1,28 @@
 #!/bin/sh
 
 case $BUTTON in
-	3) "kitty" -e nmtui; pkill -RTMIN+4 dwmblocks ;;
-	2) notify-send "🌐 Internet module" "\- Click to connect
-❌: wifi disabled
-📡: no wifi connection
-📶: wifi connection with quality
-❎: no ethernet
-🌐: ethernet working
-🔒: vpn is active
+	1|3) setsid -f "${TERMINAL:-ghostty}" -e nmtui ;;
+	2) notify-send "Internet module" "Click to connect
+Wifi off: wifi disabled
+Wifi none: no wifi connection
+Wifi N%: wifi connection with quality
+Ethernet: ethernet working
+VPN: vpn is active
 " ;;
 esac
 
 # Wifi
+wifi=""
 if [ "$(cat /sys/class/net/w*/operstate 2>/dev/null)" = 'up' ] ; then
-	wifiicon="$(awk '/^\s*w/ { print "📶", int($3 * 100 / 70) "% " }' /proc/net/wireless)"
+	wifi="$(awk '/^\s*w/ { print "Wifi " int($3 * 100 / 70) "%" }' /proc/net/wireless)"
 elif [ "$(cat /sys/class/net/w*/operstate 2>/dev/null)" = 'down' ] ; then
-	[ "$(cat /sys/class/net/w*/flags 2>/dev/null)" = '0x1003' ] && wifiicon="📡 " || wifiicon="❌ "
+	[ "$(cat /sys/class/net/w*/flags 2>/dev/null)" = '0x1003' ] && wifi="Wifi none" || wifi="Wifi off"
 fi
 
 # Ethernet
-[ "$(cat /sys/class/net/e*/operstate 2>/dev/null)" = 'up' ] && ethericon="🌐" || ethericon="❎"
+[ "$(cat /sys/class/net/e*/operstate 2>/dev/null)" = 'up' ] && eth="Ethernet"
 
 # TUN
-[ -n "$(cat /sys/class/net/tun*/operstate 2>/dev/null)" ] && tunicon=" 🔒"
+[ -n "$(cat /sys/class/net/tun*/operstate 2>/dev/null)" ] && vpn="VPN"
 
-printf "%s%s%s\n" "$wifiicon" "$ethericon" "$tunicon"
+echo "$wifi${eth:+ $eth}${vpn:+ $vpn}" | sed 's/^ //'

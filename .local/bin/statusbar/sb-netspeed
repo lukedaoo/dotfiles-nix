@@ -1,8 +1,8 @@
 #!/bin/sh
 
 case $BUTTON in
-	1) setsid -f "kitty" -e bmon ;;
-	3) setsid -f "kitty" -e sudo nethogs -v 10 ;;
+	1) setsid -f "${TERMINAL:-ghostty}" -e bmon ;;
+	3) setsid -f "${TERMINAL:-ghostty}" -e sudo nethogs -v 10 ;;
 esac
 update() {
     sum=0

@@ -1,29 +1,17 @@
 #!/bin/sh
 case $BUTTON in
-	3) setsid -f "kitty" -e nmtui ;;
+	1|3) setsid -f "${TERMINAL:-ghostty}" -e nmtui ;;
 esac
-tool_path="/usr/sbin/iwgetid"
-ssid=$($tool_path -r)
 
-char="直  睊"
-device_off_icon="睊"
+ssid=$(nmcli -t -f active,ssid dev wifi 2>/dev/null | awk -F: '$1 == "yes" { print $2; exit }')
+eth_state=$(cat /sys/class/net/e*/operstate 2>/dev/null | head -n 1)
 
-status=""
-
-if [[ $ssid != "" ]]
-then
-    status=$ssid
+if [ "$eth_state" = "up" ]; then
+	echo "Ethernet"
+elif [ -n "$ssid" ]; then
+	echo "Wifi: $ssid"
+elif [ "$(nmcli radio wifi 2>/dev/null)" = "disabled" ]; then
+	echo "Wifi Disabled"
+else
+	echo "Not Connected"
 fi
-
-if [[ $ssid == "" ]]
-then
-    interface=$($tool_path)
-    if [[ $interface == "" ]] ;
-    then
-        status="Wifi Disabled"
-    else
-        status="Not Connected"
-    fi
-fi
-
-echo $status

@@ -2,7 +2,7 @@
 case $BUTTON in
 	2) notify-send " Right click to lock" ;;
 	3) betterlockscreen -l;;
-	6) "kitty" -e "code" "$0" ;;
+	6) "${TERMINAL:-ghostty}" -e "code" "$0" ;;
 esac
 
 whoami

@@ -61,3 +61,12 @@ live_server() {
 claude-study() {
     ollama launch claude --model gemma4
 }
+
+# Open file with default app, else default browser.
+open() {
+    if xdg-open "$1" >/dev/null 2>&1; then
+        return
+    fi
+
+    nohup "${BROWSER:-xdg-open}" "$1" >/dev/null 2>&1 &
+}
