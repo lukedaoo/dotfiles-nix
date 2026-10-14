@@ -1,15 +1,15 @@
 [global]
     monitor = 0
     follow = keyboard
-    width = 370
+    width = (0, 370)
     height = 600
     offset = 0x19
     padding = 2
     horizontal_padding = 2
-    transparency = 25
+    transparency = 0
     font = Comic Mono 14
-    format = "<b>%s</b>\n%b"
-    frame_color = "#8AADF4"
+    format = "<b><span foreground='#FFDD33'>%s</span></b>\n%b"
+    frame_color = "#9E95C7"
     separator_color= frame
 
 #[urgency_low]
@@ -30,14 +30,14 @@
 #    frame_color = "#F26D78"
 #    timeout = 10
 [urgency_low]
-background = "#24273A"
-foreground = "#CAD3F5"
+background = "#181818"
+foreground = "#E4E4EF"
 
 [urgency_normal]
-background = "#24273A"
-foreground = "#CAD3F5"
+background = "#181818"
+foreground = "#E4E4EF"
 
 [urgency_critical]
-background = "#24273A"
-foreground = "#CAD3F5"
-frame_color = "#F5A97F"
+background = "#181818"
+foreground = "#E4E4EF"
+frame_color = "#F43841"

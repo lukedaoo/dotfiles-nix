@@ -1,22 +1,42 @@
 #!/bin/sh
-TODAY=$(date '+%-e')
-HEAD="$(date '+%B %Y')"
-FIRST=$(date '+%Y-%m-01')
+STATE="${XDG_RUNTIME_DIR:-/tmp}/sb-date-offset"
+OFFSET=$(cat "$STATE" 2>/dev/null || echo 0)
 
-# tail -n +2 strips each month's "Month Year" header line
-PREV=$(cal -m $(date -d "$FIRST -1 month" '+%m %Y') | tail -n +2)
-CURR=$(cal -m | tail -n +2 | sed -z "s|\b$TODAY\b|<u><b><span color='red'>$TODAY</span></b></u>|1")
-NEXT=$(cal -m $(date -d "$FIRST +1 month" '+%m %Y') | tail -n +2)
+# Left click opens at current month; scroll up/down moves one month
+case $BUTTON in
+    1) OFFSET=0 ;;
+    4) OFFSET=$((OFFSET - 1)) ;;
+    5) OFFSET=$((OFFSET + 1)) ;;
+esac
+echo "$OFFSET" > "$STATE"
 
-BODY="<tt><b>$(date -d "$FIRST -1 month" '+%B')</b>
+show_calendar() {
+    TODAY=$(date '+%-e')
+    FIRST=$(date -d "$(date '+%Y-%m-01') $OFFSET month" '+%Y-%m-01')
+    HEAD="$(date -d "$FIRST" '+%B %Y')"
+
+    # tail -n +2 strips each month's "Month Year" header line
+    PREV=$(cal -m $(date -d "$FIRST -1 month" '+%m %Y') | tail -n +2)
+    CURR=$(cal -m $(date -d "$FIRST" '+%m %Y') | tail -n +2)
+    NEXT=$(cal -m $(date -d "$FIRST +1 month" '+%m %Y') | tail -n +2)
+
+    # Highlight today only when viewing the current month
+    if [ "$OFFSET" -eq 0 ]; then
+        CURR=$(echo "$CURR" | sed -z "s|\b$TODAY\b|<u><b><span color='red'>$TODAY</span></b></u>|1")
+    fi
+
+    BODY="<tt><b>$(date -d "$FIRST -1 month" '+%B')</b>
 $PREV
-<b>$(date '+%B')</b>
+<b>$(date -d "$FIRST" '+%B')</b>
 $CURR
 <b>$(date -d "$FIRST +1 month" '+%B')</b>
 $NEXT</tt>"
 
+    notify-send -r 90210 "$HEAD" "$BODY"
+}
+
 case $BUTTON in
-    1) notify-send -r 90210 "$HEAD" "$BODY" ;;
+    1|4|5) show_calendar ;;
 esac
 
 DAY=$(date '+%A')
