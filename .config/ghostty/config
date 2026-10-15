@@ -4,8 +4,9 @@ font-size = 18
 theme = Gruber Darker
 
 background = 000000
-#background-opacity = 0.8
+background-opacity = 1
 window-decoration = false
+confirm-close-surface = false
 
 # Disable default keybindings
 keybind = super+ctrl+shift+up=unbind
