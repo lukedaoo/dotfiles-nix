@@ -12,7 +12,7 @@
 
 - Use enums instead of booleans for function parameters.
 
-- Let the reader of the code breathe. Add empty lines between logical blocks of code. Add a small, to the point, comment to explain *what* the block does and *why*. Use examples when possible. Propose ASCII drawings to explain complete systems.
+- Let the reader of the code breathe. Add empty lines between logical blocks of code. Do not write comments when the code is obvious. Comment only non-obvious *why*, and only on request otherwise. Propose ASCII drawings to explain complete systems.
 
 - Treat member visibility changes as a breaking design shift. Keep all fields and functions private unless external access is strictly required by the design. Prompt the user for explicit approval before changing any access modifier from private to internal or public.
 
