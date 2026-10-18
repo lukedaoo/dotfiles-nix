@@ -1,0 +1,21 @@
+#!/bin/bash
+DIR=$(dirname "$(readlink -f "$0")")
+. "$DIR/pomodoro-common"
+
+clip=$(xclip -o -selection clipboard 2>/dev/null | head -n 1)
+recent=$({ echo "$clip"; cut -f5 "$SESSION" 2>/dev/null | tac; } | awk 'NF && !seen[$0]++' | head -20)
+title=$(printf '%s\n' "$recent" | dmenu -p "Pomodoro:" -l 10)
+[ -z "$title" ] && exit 0
+
+music=$(printf 'No\nYes\n' | dmenu -p "Start music?" -l 2)
+if [ "$music" = Yes ] && [ -z "$MUSIC_PATH" ]; then
+    notify-send -a pomodoro "No music path" "Set it in pomodoro-config"
+    music=no
+fi
+
+stop_timer
+TITLE=$title
+CYCLE=1
+begin_phase work
+[ "$music" = Yes ] && start_music
+setsid -f "$DIR/pomodoro-run" >/dev/null 2>&1

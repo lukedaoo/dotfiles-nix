@@ -1,0 +1,16 @@
+#!/bin/bash
+# Background ticker. Started by pomodoro-start.
+DIR=$(dirname "$(readlink -f "$0")")
+. "$DIR/pomodoro-common"
+
+echo $$ > "$RUNNER_PID"
+trap 'rm -f "$RUNNER_PID"' EXIT
+
+while true; do
+    sleep 1
+    load_state
+    [ -z "$PHASE" ] && exit 0
+    [ -z "$END" ] && continue
+    [ "$(seconds_left)" -gt 0 ] && continue
+    end_phase || exit 0
+done

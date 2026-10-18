@@ -1,0 +1,142 @@
+#!/bin/sh
+# Sourced by pomodoro-* and sb-pomodoro.
+CACHE="$HOME/.cache/pomodoro"
+CONF="$CACHE/config"
+SESSION="$CACHE/session"
+STATE="$CACHE/state"
+RUNNER_PID="$CACHE/runner.pid"
+BAR_SIGNAL=28
+SOUND_DIR=/usr/share/sounds/freedesktop/stereo
+
+mkdir -p "$CACHE"
+
+# Defaults, overridden by $CONF.
+WORK_MIN=25
+SHORT_MIN=5
+LONG_MIN=15
+LONG_EVERY=4
+SOUND=on
+URL=
+MUSIC_PATH=
+[ -f "$CONF" ] && . "$CONF"
+
+refresh_bar() {
+    pkill -RTMIN+$BAR_SIGNAL dwmblocks
+}
+
+# Sets PHASE TITLE CYCLE END LEFT DURATION; empty when idle.
+load_state() {
+    PHASE= TITLE= CYCLE=1 END= LEFT= DURATION=
+    [ -f "$STATE" ] && . "$STATE"
+}
+
+save_state() {
+    {
+        printf 'PHASE=%s\n' "$PHASE"
+        printf 'TITLE=%q\n' "$TITLE"
+        printf 'CYCLE=%s\nEND=%s\nLEFT=%s\nDURATION=%s\n' "$CYCLE" "$END" "$LEFT" "$DURATION"
+    } > "$STATE.tmp"
+    mv "$STATE.tmp" "$STATE"
+}
+
+seconds_left() {
+    if [ -n "$END" ]; then
+        echo $((END - $(date +%s)))
+        return
+    fi
+    echo "$LEFT"
+}
+
+# log_phase <done|aborted>: appends focused seconds to the session log.
+log_phase() {
+    focused=$((DURATION - $(seconds_left)))
+    [ "$1" = done ] && focused=$DURATION
+    [ "$focused" -le 0 ] && return
+    printf '%s\t%s\t%s\t%s\t%s\n' "$(date +%s)" "$PHASE" "$focused" "$1" "$TITLE" >> "$SESSION"
+}
+
+phase_secs() {
+    case $1 in
+        work)  echo $((WORK_MIN * 60)) ;;
+        short) echo $((SHORT_MIN * 60)) ;;
+        long)  echo $((LONG_MIN * 60)) ;;
+    esac
+}
+
+alert() {
+    notify-send -u critical -a pomodoro "$1" "$2"
+    [ "$SOUND" = on ] && paplay "$SOUND_DIR/${3:-complete}.oga" &
+    [ -n "$URL" ] && xdg-open "$URL" >/dev/null 2>&1 &
+}
+
+start_music() {
+    # mpd rejects absolute paths: make them relative to its music dir.
+    mpd_dir=$(sed -n 's/^music_directory *"\(.*\)"/\1/p' "$HOME/.config/mpd/mpd.conf" 2>/dev/null)
+    mpd_dir=$(echo "${mpd_dir:-$HOME/Music}" | sed "s|^~|$HOME|; s|/*$||")
+    track=${MUSIC_PATH#"$mpd_dir"}
+    track=${track#/}
+    track=${track%/}
+
+    mpc -q clear
+    mpc -q add "${track:-/}" 2>/dev/null || mpc -q load "$track"
+    mpc -q repeat on
+    mpc -q play
+}
+
+stop_music() {
+    mpc -q stop
+    mpc -q clear
+}
+
+begin_phase() {
+    PHASE=$1
+    DURATION=$(phase_secs "$PHASE")
+    END=$(($(date +%s) + DURATION))
+    LEFT=
+    save_state
+    refresh_bar
+}
+
+# Called when a phase runs out: log, alert, move on.
+end_phase() {
+    stop_music
+    log_phase done
+    if [ "$PHASE" != work ]; then
+        alert "Break over" "Start the next pomodoro" alarm-clock-elapsed
+        rm -f "$STATE"
+        refresh_bar
+        return 1
+    fi
+
+    if [ $((CYCLE % LONG_EVERY)) -eq 0 ]; then
+        next=long
+    else
+        next=short
+    fi
+    alert "Pomodoro done: $TITLE" "Take a $next break"
+    CYCLE=$((CYCLE + 1))
+    begin_phase "$next"
+}
+
+stop_timer() {
+    load_state
+    [ -n "$PHASE" ] && log_phase aborted
+    stop_music
+    [ -f "$RUNNER_PID" ] && kill "$(cat "$RUNNER_PID")" 2>/dev/null
+    rm -f "$STATE" "$RUNNER_PID"
+    refresh_bar
+}
+
+toggle_pause() {
+    load_state
+    [ -z "$PHASE" ] && return
+    if [ -n "$END" ]; then
+        LEFT=$(seconds_left)
+        END=
+    else
+        END=$(($(date +%s) + LEFT))
+        LEFT=
+    fi
+    save_state
+    refresh_bar
+}

@@ -1,4 +1,6 @@
 #!/bin/sh
+[ -r /sys/class/power_supply/BAT0/capacity ] || exit 0
+
 batstat=$(cat /sys/class/power_supply/BAT0/capacity) 
 batcharge=$(cat /sys/class/power_supply/BAT0/status) 
 

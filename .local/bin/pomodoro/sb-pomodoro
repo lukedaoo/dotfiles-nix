@@ -1,0 +1,24 @@
+#!/bin/sh
+. "$HOME/.local/bin/pomodoro/pomodoro-common"
+
+# Left click: pause/resume. Right click: stop.
+case $BUTTON in
+    1) toggle_pause ;;
+    3) stop_timer ;;
+esac
+
+load_state
+[ -z "$PHASE" ] && exit 0
+
+left=$(seconds_left)
+[ "$left" -lt 0 ] && left=0
+time=$(printf '%02d:%02d' $((left / 60)) $((left % 60)))
+
+case $PHASE in
+    work)  icon="(work $CYCLE/$LONG_EVERY)"; label="$TITLE" ;;
+    short) icon="(break)"; label="short break" ;;
+    long)  icon="(break)"; label="long break" ;;
+esac
+[ -z "$END" ] && icon="(pause)"
+
+echo "$icon $time $(printf '%.20s' "$label")"

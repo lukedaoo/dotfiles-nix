@@ -1,0 +1,52 @@
+#!/bin/bash
+DIR=$(dirname "$(readlink -f "$0")")
+. "$DIR/pomodoro-common"
+
+save_conf() {
+    cat > "$CONF" <<CFG
+WORK_MIN=$WORK_MIN
+SHORT_MIN=$SHORT_MIN
+LONG_MIN=$LONG_MIN
+LONG_EVERY=$LONG_EVERY
+SOUND=$SOUND
+URL=$(printf '%q' "$URL")
+MUSIC_PATH=$(printf '%q' "$MUSIC_PATH")
+CFG
+}
+
+# Offers the clipboard as the only entry, since dmenu can't paste here.
+ask_clip() {
+    printf '%s\n' "$(xclip -o -selection clipboard 2>/dev/null | head -n 1)" | dmenu -p "$1" -l 1
+}
+
+ask() {
+    dmenu -p "$1" < /dev/null
+}
+
+while true; do
+    choice=$(printf '%s\n' \
+        "Work: $WORK_MIN min" \
+        "Short break: $SHORT_MIN min" \
+        "Long break: $LONG_MIN min" \
+        "Long break every: $LONG_EVERY pomodoros" \
+        "Sound: $SOUND" \
+        "URL on alert: ${URL:-none}" \
+        "Music path: ${MUSIC_PATH:-none}" \
+        | dmenu -p "Pomodoro config" -l 7)
+    [ -z "$choice" ] && exit 0
+
+    case $choice in
+        Work*)  val=$(ask "Work minutes:");  [ -n "$val" ] && WORK_MIN=$val ;;
+        Short*) val=$(ask "Short break minutes:"); [ -n "$val" ] && SHORT_MIN=$val ;;
+        Long\ break:*) val=$(ask "Long break minutes:"); [ -n "$val" ] && LONG_MIN=$val ;;
+        Long\ break\ every*) val=$(ask "Pomodoros before long break:"); [ -n "$val" ] && LONG_EVERY=$val ;;
+        Sound*) [ "$SOUND" = on ] && SOUND=off || SOUND=on ;;
+        URL*)   URL=$(ask_clip "URL (pick clipboard, empty = none):") ;;
+        Music*) MUSIC_PATH=$(ask_clip "Music path/URL (pick clipboard, empty = none):") ;;
+    esac
+
+    case $WORK_MIN$SHORT_MIN$LONG_MIN$LONG_EVERY in
+        *[!0-9]*) notify-send -a pomodoro "Invalid number"; . "$CONF"; continue ;;
+    esac
+    save_conf
+done
