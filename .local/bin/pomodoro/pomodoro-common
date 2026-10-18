@@ -102,10 +102,9 @@ end_phase() {
     stop_music
     log_phase done
     if [ "$PHASE" != work ]; then
-        alert "Break over" "Start the next pomodoro" alarm-clock-elapsed
-        rm -f "$STATE"
-        refresh_bar
-        return 1
+        alert "Break over" "Next pomodoro: $TITLE" alarm-clock-elapsed
+        begin_phase work
+        return 0
     fi
 
     if [ $((CYCLE % LONG_EVERY)) -eq 0 ]; then
