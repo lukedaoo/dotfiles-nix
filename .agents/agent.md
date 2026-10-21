@@ -20,6 +20,10 @@
 
 - Don't touch blocks of code unrelated to the feature you implement. e.g. Don't add comments to a block of code if you did not create it or modify it. As much as possible try to minimize the number of changed lines when implementing a feature.
 
+- Reuse before building. Check for an existing helper, component or module first. Extract shared code only when it is needed in 2+ places now, or reuse is highly likely. Weigh the cost: abstraction, new dependency, coupling between callers. If unsure, extract to a local function.
+
+- Before changing code, find its existing tests and read them to learn the current behavior. Run them first for a baseline. If there are none, characterize the behavior (read callers, run it) before editing. Report any behavior the tests do not cover.
+
 - Strictly adhere to the layered boundary hierarchy: each layer may only communicate with its immediate neighbor directly below it. Never "punch holes" through layers (e.g., controllers or UI components must never directly call database queries, raw hardware drivers, or low-level network clients; always route through the intermediate service/abstraction layer).
 
 - Always use {}, even on a one-line "if" statement.
