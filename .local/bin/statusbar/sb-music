@@ -1,63 +1,40 @@
-#!/usr/bin/env bash
+#!/bin/sh
+# Music block for dwmblocks (signal 30). mpd only, via mpc (no playerctl / browsers).
+#   left click:  switch between "title" and "artist - title"
+#   right click: play/pause
+# sb-music-loop refreshes this block as soon as mpd changes state.
 
-# Ensure playerctl-loop is running
-pidof -x playerctl-loop >/dev/null 2>&1 || playerctl-loop >/dev/null 2>&1 &
+SIGNAL=30
+FORMAT_FILE="${XDG_RUNTIME_DIR:-/tmp}/sb-music-format"
 
-# Prioritize MPD first, then Chromium/Chrome.
-# Match by prefix: bridges/browsers may register e.g. "mpd" or "chromium.instance1234".
-PLAYER=""
-for P in mpd chromium; do
-    PLAYER=$(playerctl -l 2>/dev/null | grep -m1 "^$P")
-    [ -n "$PLAYER" ] && break
-done
-
-# If no player is running, show idle
-if [ -z "$PLAYER" ]; then
-    INDICATOR="(idle)"
-    INFO=""
-    echo -e "$INDICATOR$INFO"
-    exit 0
-fi
-
-# Get playback status
-STATUS=$(playerctl -p "$PLAYER" status 2>/dev/null)
-
-# Text indicators
-case "$STATUS" in
-    "Playing") INDICATOR="(playing) " ;;
-    "Paused")  INDICATOR="(pause) " ;;
-    *)         INDICATOR="(idle)" ;;
-esac
-
-# Get metadata
-TITLE=$(playerctl -p "$PLAYER" metadata --format '{{title}}' 2>/dev/null)
-ARTIST=$(playerctl -p "$PLAYER" metadata --format '{{artist}}' 2>/dev/null)
-
-# Fallback: extract filename (strip path + extension) if title is empty
-if [ -z "$TITLE" ]; then
-    FILENAME=$(playerctl -p "$PLAYER" metadata --format '{{xesam:url}}' 2>/dev/null \
-        | sed 's#.*/##; s/\.[^.]*$//')
-    TITLE="$FILENAME"
-    ARTIST=""
-fi
-
-# Truncate for display
-NORMAL=$(printf "%.10s" "$TITLE")
-if [ -n "$ARTIST" ]; then
-    ALTERNATE="$(printf "%.10s" "$ARTIST") - $(printf "%.10s" "$TITLE")"
-else
-    ALTERNATE="$NORMAL"
-fi
-
-FORMAT_FILE="/tmp/dwmblocks_mus_format"
-[ ! -f "$FORMAT_FILE" ] && echo "0" > "$FORMAT_FILE"
-read FORMAT < "$FORMAT_FILE"
+pgrep -x -u "$USER" sb-music-loop > /dev/null || setsid -f sb-music-loop > /dev/null 2>&1
 
 case $BUTTON in
-    1) echo "$(( (FORMAT + 1) % 2 ))" > "$FORMAT_FILE" ;;
-    3) playerctl -p "$PLAYER" play-pause; pkill -RTMIN+30 "${STATUSBAR:-dwmblocks}" ;;
+    1) [ "$(cat "$FORMAT_FILE" 2>/dev/null)" = 1 ] && echo 0 > "$FORMAT_FILE" || echo 1 > "$FORMAT_FILE" ;;
+    3) mpc -q toggle ;;
 esac
 
-[ "$FORMAT" -eq 0 ] && INFO="$NORMAL" || INFO="$ALTERNATE"
+# mpd not running -> idle
+state=$(mpc status 2>/dev/null | sed -n 's/^\[\(playing\|paused\)\].*/\1/p')
+case $state in
+    playing) indicator="(playing) " ;;
+    paused)  indicator="(pause) " ;;
+    *)       echo "(idle)"; exit 0 ;;
+esac
 
-echo -e "$INDICATOR$INFO"
+title=$(mpc --format '%title%' current 2>/dev/null)
+artist=$(mpc --format '%artist%' current 2>/dev/null)
+# No tags: use the file name without path and extension.
+if [ -z "$title" ]; then
+    title=$(mpc --format '%file%' current 2>/dev/null | sed 's#.*/##; s/\.[^.]*$//')
+    artist=
+fi
+
+short() { printf '%.10s' "$1"; }
+if [ "$(cat "$FORMAT_FILE" 2>/dev/null)" = 1 ] && [ -n "$artist" ]; then
+    info="$(short "$artist") - $(short "$title")"
+else
+    info=$(short "$title")
+fi
+
+echo "$indicator$info"

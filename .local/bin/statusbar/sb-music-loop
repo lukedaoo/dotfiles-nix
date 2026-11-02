@@ -1,0 +1,13 @@
+#!/bin/sh
+# Refresh the music block (sb-music, signal 30) whenever mpd changes
+# (play/pause/stop/next track). Started by sb-music if not running.
+# If mpd is not running, wait and retry instead of exiting.
+
+SIGNAL=30
+
+while :; do
+    mpc idleloop player 2>/dev/null | while read -r _; do
+        pkill -RTMIN+$SIGNAL "${STATUSBAR:-dwmblocks}"
+    done
+    sleep 5
+done

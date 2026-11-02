@@ -17,8 +17,7 @@ VOID_PACKAGES=(
     kitty ghostty dmenu feh nsxiv ranger dunst libnotify arandr flameshot firefox chromium brightnessctl
     Thunar thunar-archive-plugin tumbler
     # audio (PipeWire; pipewire includes pipewire-pulse, alsa-pipewire routes ALSA apps)
-    alsa-utils pipewire alsa-pipewire wireplumber pavucontrol mpd mpc
-    playerctl mpDris2               # media keys + bar (mpDris2 exposes mpd to playerctl)
+    alsa-utils pipewire alsa-pipewire wireplumber pavucontrol mpd mpc             # mpd + mpc: music in the bar, media keys, pomodoro
     # bluetooth / network
     bluez blueman wireless_tools samba avahi nss-mdns
     # typing method

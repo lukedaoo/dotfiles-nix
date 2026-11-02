@@ -78,7 +78,7 @@ start_music() {
     track=${track%/}
 
     # mpd normally starts with start-dwm; start it here if it is not running.
-    if ! mpc -q status > /dev/null 2>&1; then
+    if ! pgrep -x -u "$USER" mpd > /dev/null; then
         mkdir -p "$HOME/.local/share/mpd/playlists"
         mpd > /dev/null 2>&1
         sleep 1

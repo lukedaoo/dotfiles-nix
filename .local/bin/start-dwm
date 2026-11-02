@@ -13,15 +13,10 @@ dunst &
 #enable alpha feautre
 xcompmgr &
 
-# mpd + MPRIS bridge, so playerctl (bar, media keys) sees mpd.
-# mpd forks into the background once it is ready, so the bridge can connect right after.
+# mpd: music for the bar (sb-music), media keys and pomodoro, all controlled with mpc.
+# Only start it if not running yet: a second mpd cannot get port 6600 but stays alive.
 mkdir -p "$HOME/.local/share/mpd/playlists"
-mpd
-if command -v mpd-mpris > /dev/null; then      # Arch
-    mpd-mpris &
-elif command -v mpDris2 > /dev/null; then      # Void
-    mpDris2 &
-fi
+pgrep -x -u "$USER" mpd > /dev/null || mpd
 
 #start layout
 layout=~/.screenlayout/$(cat /etc/hostname).sh

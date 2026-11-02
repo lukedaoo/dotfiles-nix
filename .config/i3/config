@@ -108,9 +108,9 @@ bindsym XF86AudioLowerVolume exec --no-startup-id amixer set Master 5%- && pkill
 bindsym XF86AudioRaiseVolume exec --no-startup-id amixer set Master 5%+ && pkill -RTMIN+20 i3blocks
 bindsym XF86AudioMute        exec --no-startup-id amixer set Master toggle && pkill -RTMIN+20 i3blocks
 bindsym XF86AudioMicMute     exec --no-startup-id amixer set Capture toggle
-bindsym XF86AudioNext        exec --no-startup-id playerctl next
-bindsym XF86AudioPrev        exec --no-startup-id playerctl previous
-bindsym XF86AudioPlay        exec --no-startup-id playerctl play-pause
+bindsym XF86AudioNext        exec --no-startup-id mpc -q next
+bindsym XF86AudioPrev        exec --no-startup-id mpc -q prev
+bindsym XF86AudioPlay        exec --no-startup-id mpc -q toggle
 bindsym XF86MonBrightnessUp   exec --no-startup-id light -A 10
 bindsym XF86MonBrightnessDown exec --no-startup-id light -U 10
 
