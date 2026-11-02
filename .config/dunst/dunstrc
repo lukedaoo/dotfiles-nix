@@ -7,7 +7,7 @@
     padding = 2
     horizontal_padding = 2
     transparency = 0
-    font = Comic Mono 14
+    font = Comic Code 14
     format = "<b><span foreground='#FFDD33'>%s</span></b>\n%b"
     frame_color = "#9E95C7"
     separator_color= frame
