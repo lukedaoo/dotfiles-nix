@@ -1,11 +1,12 @@
 #!/bin/bash
 # Dev tool packages from the distro repos. Sourced by setup-dev.sh.
 # Tools not taken from repos (installed per user by their own scripts):
-#   sdkman (java, maven), nvm (node), miniconda, gf2 (built from source), CLion (JetBrains tarball)
+#   sdkman (java, maven), nvm (node), miniconda, gf2 (built from source)
+# CLion: Arch AUR (install_clion.sh), not available on Void.
 
 DEV_PACKAGES_ARCH=(
     base-devel git curl zip unzip    # build tools + what the installers need
-    gdb                              # debugger (gf2 frontend)
+    gdb cmake                        # debugger (gf2, CLion) + C/C++ builds
     freetype2 libx11                 # gf2 build deps
     rustup                           # rust toolchains (rustc, cargo)
     go
@@ -16,7 +17,7 @@ DEV_PACKAGES_ARCH=(
 
 DEV_PACKAGES_VOID=(
     base-devel git curl zip unzip
-    gdb
+    gdb cmake
     freetype-devel libX11-devel
     rustup
     go

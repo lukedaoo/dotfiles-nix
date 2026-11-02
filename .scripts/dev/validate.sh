@@ -60,7 +60,10 @@ check "user in docker group (re-login after first install)" in_docker_group
 
 check_version "gdb"             gdb --version
 check         "gf2 (~/.local/bin/gf2)" test -x "$HOME/.local/bin/gf2"
-check         "clion (~/Software/clion)" test -x "$HOME/.local/bin/clion"
+case "$(detect_distro)" in
+    arch) check "clion (AUR)" has_cmd clion ;;
+    void) log_info "clion: not available on Void, skipped" ;;
+esac
 
 check_version "vscode (code)"   code --version
 check_version "rustc"           rustc --version
