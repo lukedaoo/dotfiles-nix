@@ -5,7 +5,7 @@
 
 VOID_PACKAGES=(
     # base / cli
-    git curl zip unzip zsh neovim ripgrep zoxide htop bmon nethogs openssh file trash-cli
+    git curl zip unzip zsh neovim ripgrep zoxide htop bmon nethogs openssh file trash-cli github-cli
     # documents
     typst
     # build tools (suckless). Void ships headers in separate -devel packages.
