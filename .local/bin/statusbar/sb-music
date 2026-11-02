@@ -3,13 +3,12 @@
 # Ensure playerctl-loop is running
 pidof -x playerctl-loop >/dev/null 2>&1 || playerctl-loop >/dev/null 2>&1 &
 
-# Prioritize MPD first, then Chromium/Chrome
+# Prioritize MPD first, then Chromium/Chrome.
+# Match by prefix: bridges/browsers may register e.g. "mpd" or "chromium.instance1234".
 PLAYER=""
 for P in mpd chromium; do
-    if playerctl -l 2>/dev/null | grep -q "^$P$"; then
-        PLAYER="$P"
-        break
-    fi
+    PLAYER=$(playerctl -l 2>/dev/null | grep -m1 "^$P")
+    [ -n "$PLAYER" ] && break
 done
 
 # If no player is running, show idle
@@ -56,7 +55,7 @@ read FORMAT < "$FORMAT_FILE"
 
 case $BUTTON in
     1) echo "$(( (FORMAT + 1) % 2 ))" > "$FORMAT_FILE" ;;
-    3) playerctl -p "$PLAYER" play-pause; pkill -RTMIN+11 "${STATUSBAR:-dwmblocks}" ;;
+    3) playerctl -p "$PLAYER" play-pause; pkill -RTMIN+30 "${STATUSBAR:-dwmblocks}" ;;
 esac
 
 [ "$FORMAT" -eq 0 ] && INFO="$NORMAL" || INFO="$ALTERNATE"

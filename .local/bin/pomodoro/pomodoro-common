@@ -77,8 +77,23 @@ start_music() {
     track=${track#/}
     track=${track%/}
 
+    # mpd normally starts with start-dwm; start it here if it is not running.
+    if ! mpc -q status > /dev/null 2>&1; then
+        mkdir -p "$HOME/.local/share/mpd/playlists"
+        mpd > /dev/null 2>&1
+        sleep 1
+    fi
+
     mpc -q clear
-    mpc -q add "${track:-/}" 2>/dev/null || mpc -q load "$track"
+    if ! mpc -q add "${track:-/}" 2>/dev/null && ! mpc -q load "$track" 2>/dev/null; then
+        # Not in mpd's database yet (e.g. music just copied in): rescan and retry once.
+        mpc -q update --wait
+        mpc -q add "${track:-/}" 2>/dev/null || mpc -q load "$track" 2>/dev/null
+    fi
+    if [ -z "$(mpc playlist)" ]; then
+        notify-send -a pomodoro "No music found" "MUSIC_PATH=$MUSIC_PATH (mpd music dir: $mpd_dir)"
+        return 1
+    fi
     mpc -q repeat on
     mpc -q play
 }

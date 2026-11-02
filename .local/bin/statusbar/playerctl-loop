@@ -1,0 +1,11 @@
+#!/bin/sh
+# Refresh the music block (sb-music, signal 30) whenever any player changes
+# status or track, instead of waiting for its 3 second interval.
+# Started by sb-music if it is not already running.
+
+SIGNAL=30
+
+playerctl --all-players --follow metadata --format '{{playerName}} {{status}} {{title}}' 2>/dev/null |
+while read -r _; do
+    pkill -RTMIN+$SIGNAL "${STATUSBAR:-dwmblocks}"
+done

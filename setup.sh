@@ -64,7 +64,7 @@ step() {
 # ---------- steps ----------
 log_step "Creating directories"
 for d in "$HOME/.local/share" "$HOME/.runtime-lib" "$HOME/Work" "$HOME/.wallpaper" \
-         "$HOME/.trash" "$HOME/Desktop/screenshot"; do
+         "$HOME/.trash" "$HOME/Desktop/screenshot" "$HOME/Music" "$HOME/.local/share/mpd/playlists"; do
     [[ -d "$d" ]] || run mkdir -p "$d"
 done
 

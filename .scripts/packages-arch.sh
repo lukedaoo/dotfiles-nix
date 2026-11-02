@@ -12,7 +12,8 @@ PACMAN_PACKAGES=(
     # desktop apps / utils
     kitty ghostty dmenu feh nsxiv ranger dunst libnotify arandr flameshot firefox brightnessctl
     # audio (PipeWire; pipewire-pulse keeps pactl/pavucontrol working)
-    alsa-utils pipewire pipewire-pulse pipewire-alsa wireplumber pavucontrol mpc
+    alsa-utils pipewire pipewire-pulse pipewire-alsa wireplumber pavucontrol mpd mpc
+    playerctl mpd-mpris             # media keys + bar (mpd-mpris exposes mpd to playerctl)
     # bluetooth / network
     bluez bluez-utils blueman wireless_tools samba avahi nss-mdns
     # typing method
