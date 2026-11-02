@@ -1,0 +1,7 @@
+#!/bin/sh
+# Used by startx instead of /etc/X11/xinit/xserverrc.
+# Key repeat as X server defaults, so it also applies to keyboards plugged in later
+# (setting it with `xset r rate` is lost when the keyboard reconnects).
+#   -ardelay 200    repeat starts after 200 ms
+#   -arinterval 15  one repeat every 15 ms (~66/s)
+exec /usr/bin/X -nolisten tcp -ardelay 200 -arinterval 15 "$@"

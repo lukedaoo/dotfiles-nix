@@ -1,74 +1,40 @@
 #!/bin/bash
-clone() {
-    git clone $1
-}
+# Clone (if missing) and build/install dwm, st, slstatus, dwmblocks from lukedaoo/suckless.
+# An existing ~/.config/suckless is never deleted, so local config.h edits are kept.
+set -uo pipefail
 
-SUCKLESS_CONFIG_DIR="$HOME/.config"
-SUCKLESS_GIT_REPO="https://git.suckless.org/"
-SUCKLESS_SOFTWARE=("dwm" "st" "slstatus" "dwmblocks")
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/../../lib.sh"
 
-MY_SUCKLESS="https://github.com/lukedaoo/suckless"
+SUCKLESS_REPO="https://github.com/lukedaoo/suckless"
+SUCKLESS_DIR="$HOME/.config/suckless"
+SUCKLESS_SOFTWARE=(dwm st slstatus dwmblocks)
 
+if [[ -d "$SUCKLESS_DIR" && -n "$(ls -A "$SUCKLESS_DIR" 2>/dev/null)" ]]; then
+    log_info "Using existing $SUCKLESS_DIR (not re-cloning)"
+else
+    log_step "Cloning suckless"
+    [[ -d "$SUCKLESS_DIR" ]] && run rmdir "$SUCKLESS_DIR"
+    run git clone "$SUCKLESS_REPO" "$SUCKLESS_DIR" || die "clone $SUCKLESS_REPO failed"
+fi
 
-INSTALLED_SUCKLESS_DIR="unknown"
+log_step "Building suckless: ${SUCKLESS_SOFTWARE[*]}"
+failed=()
+for item in "${SUCKLESS_SOFTWARE[@]}"; do
+    dir="$SUCKLESS_DIR/$item"
+    if [[ "$DRY_RUN" != "1" && ! -f "$dir/Makefile" ]]; then
+        log_warn "$dir has no Makefile, skipping"
+        failed+=("$item")
+        continue
+    fi
+    # Build as the user, only install as root.
+    if run make -C "$dir" > /dev/null && run sudo make -C "$dir" install > /dev/null; then
+        log_ok "$item installed"
+    else
+        log_error "$item failed to build/install"
+        failed+=("$item")
+    fi
+done
 
-clone_original_suckless() {
-	SUCKLESS_DIR="$SUCKLESS_CONFIG_DIR/suckless"
-
-	if [ ! -d $SUCKLESS_DIR ]; then
-		mkdir $SUCKLESS_DIR
-	else 
-		rm -rf $SUCKLESS_DIR
-		mkdir $SUCKLESS_DIR
-	fi
-    	cd $SUCKLESS_DIR 
-    	for repo in ${SUCKLESS_SOFTWARE[@]}; do
-		if [ ! -d "$SUCKLESS_DIR/$repo" ]; then
-			clone "$SUCKLESS_GIT_REPO/$repo"
-		fi
-    	done
-
-	INSTALLED_SUCKLESS_DIR=$SUCKLESS_DIR
-}
-
-clone_my_suckless() {
-	SUCKLESS_DIR=$SUCKLESS_CONFIG_DIR
-	SUCKLESS_FULL_DIR="$SUCKLESS_CONFIG_DIR/suckless"
-	if [ ! -d $SUCKLESS_FULL_DIR ]; then
-		mkdir $SUCKLESS_FULL_DIR
-	else 
-		rm -rf $SUCKLESS_FULL_DIR
-	fi
-    	cd $SUCKLESS_DIR 
-	clone $MY_SUCKLESS
-
-	INSTALLED_SUCKLESS_DIR=$SUCKLESS_FULL_DIR
-}
-
-
-#clone_original_suckless $@
-clone_my_suckless $@
-
-install() {
-    echo "[INFO] Install suckless..."
-	if [[ $INSTALLED_SUCKLESS_DIR == "unknown" ]]; then
-		INSTALLED_SUCKLESS_DIR="$SUCKLESS_CONFIG_DIR/suckless"
-	fi
-	for item in ${SUCKLESS_SOFTWARE[@]}; do 
-		cd "$INSTALLED_SUCKLESS_DIR/$item"
-		sudo make uninstall
-		sudo make install
-	done
-}
-
-
-install 
-
-
-
-
-
-
-
-
-
+(( ${#failed[@]} )) && die "suckless failed: ${failed[*]}"
+exit 0

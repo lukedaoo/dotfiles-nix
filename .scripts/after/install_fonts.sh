@@ -1,27 +1,43 @@
 #!/bin/bash
+# Install ComicMono Nerd Font and refresh the font cache.
+# Comic Code is copied from the repo (.local/share/fonts/Comic Code) by copy_dotfiles.sh.
+set -uo pipefail
 
-FONTS_DIR="$HOME/.fonts"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/../lib.sh"
 
-if [ ! -d $FONTS_DIR ]; then
-	mkdir $FONTS_DIR
-fi
+FONTS_DIR="$HOME/.local/share/fonts"
+COMIC_MONO_BASE="https://raw.githubusercontent.com/xtevenx/ComicMonoNF/master/v2"
+COMIC_MONO_FILES=(ComicMonoNerdFont-Regular.ttf ComicMonoNerdFont-Bold.ttf)
 
-FONT_DOWNLOAD_URLS=(
-	#Comic Nerd fonts
-	"https://github.com/xtevenx/ComicMonoNF/raw/master/ComicMonoNF.ttf" 
-	"https://github.com/xtevenx/ComicMonoNF/raw/master/ComicMonoNF-Bold.ttf")
+has_cmd curl || die "curl is required to download fonts"
+run mkdir -p "$FONTS_DIR"
 
-if ! command -v curl > /dev/null; then
-	echo "Curl is require.. No fonts is installed"
-	exit 0
-fi
-
-echo "Fonts is installing..."
-for url in ${FONT_DOWNLOAD_URLS[@]}; do
-	echo $url
-	#(cd $FONTS_DIR && curl -O URL)
-	curl -L --create-dirs -O --output-dir $FONTS_DIR $url
+for f in "${COMIC_MONO_FILES[@]}"; do
+    dst="$FONTS_DIR/$f"
+    if [[ -f "$dst" ]] && is_font_file "$dst"; then
+        log_ok "$f already installed"
+        continue
+    fi
+    log_info "Downloading $f"
+    [[ "$DRY_RUN" == "1" ]] && { echo "  [dry-run] curl $COMIC_MONO_BASE/$f"; continue; }
+    tmp="$(mktemp)"
+    # -f: fail on HTTP errors instead of saving the error page as a .ttf
+    if curl -fsSL -o "$tmp" "$COMIC_MONO_BASE/$f" && is_font_file "$tmp"; then
+        mv "$tmp" "$dst"
+    else
+        rm -f "$tmp"
+        die "Download of $f failed or is not a font file"
+    fi
 done
 
-cd $HOME
+run fc-cache -f "$FONTS_DIR" > /dev/null
 
+[[ "$DRY_RUN" == "1" ]] && exit 0
+for family in "Comic Code" "ComicMono Nerd Font"; do
+    if fc-list : family | grep -qi "^$family"; then
+        log_ok "Font registered: $family"
+    else
+        log_warn "Font not registered: $family"
+    fi
+done
