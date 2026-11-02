@@ -15,7 +15,8 @@ pacman_name_valid() { pacman -Si "$1" > /dev/null 2>&1 || pacman -Sg "$1" > /dev
 arch_remove_conflicting() {
     local installed=()
     for pkg in "${CONFLICTING_PACKAGES[@]}"; do
-        pacman -Q "$pkg" > /dev/null 2>&1 && installed+=("$pkg")
+        # exact name only: `pacman -Q i3lock` would also match i3lock-color (it provides i3lock)
+        pacman -Qq 2>/dev/null | grep -qx -- "$pkg" && installed+=("$pkg")
     done
     (( ${#installed[@]} )) || return 0
     log_step "Removing conflicting packages: ${installed[*]}"
@@ -74,7 +75,7 @@ install_arch() {
 void_remove_conflicting() {
     local installed=()
     for pkg in "${VOID_CONFLICTING_PACKAGES[@]}"; do
-        xbps-query "$pkg" > /dev/null 2>&1 && installed+=("$pkg")
+        xbps-query -l 2>/dev/null | awk '{print $2}' | grep -qE -- "^${pkg}-[^-]+_[0-9]+$" && installed+=("$pkg")
     done
     (( ${#installed[@]} )) || return 0
     log_step "Removing conflicting packages: ${installed[*]}"

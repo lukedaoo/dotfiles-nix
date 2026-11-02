@@ -16,9 +16,6 @@ check() {
     fi
 }
 
-font_registered() { fc-list : family | grep -qi "^$1"; }
-gtk_setting() { grep -E "^\s*$1\s*=" "$HOME/.config/gtk-3.0/settings.ini" 2>/dev/null | head -1 | cut -d= -f2 | xargs; }
-theme_installed() { [[ -d "$HOME/.local/share/themes/$1" || -d "/usr/share/themes/$1" ]]; }
 icons_installed() { [[ -d "$HOME/.local/share/icons/$1" || -d "/usr/share/icons/$1" ]]; }
 dir_not_empty() { [[ -n "$(ls -A "$1" 2>/dev/null)" ]]; }
 
@@ -31,7 +28,7 @@ case "$DISTRO" in
     void) DISTRO_CMDS=(chromium) ;;
     *)    DISTRO_CMDS=() ;;
 esac
-for cmd in git zsh nvim kitty ghostty firefox flameshot brightnessctl betterlockscreen dmenu feh dunst fcitx5 "${DISTRO_CMDS[@]}"; do
+for cmd in git zsh nvim kitty ghostty firefox flameshot brightnessctl betterlockscreen i3lock lock-screen dmenu feh dunst fcitx5 "${DISTRO_CMDS[@]}"; do
     check "command: $cmd" has_cmd "$cmd"
 done
 for cmd in dwm st slstatus dwmblocks; do
@@ -65,17 +62,12 @@ esac
 
 check "keyboard: caps:escape for all keyboards" grep -q "caps:escape" /etc/X11/xorg.conf.d/00-keyboard.conf
 check "keyboard: repeat rate in ~/.xserverrc" grep -q -- "-ardelay" "$HOME/.xserverrc"
-check "lock screen: betterlockscreen cache" dir_not_empty "$HOME/.cache/betterlockscreen/current"
 check "nvim config: ~/.config/nvim" dir_not_empty "$HOME/.config/nvim"
 check "zsh config: ~/.config/zsh/.zshrc" test -f "$HOME/.config/zsh/.zshrc"
 
-check "font: Comic Code" font_registered "Comic Code"
-check "font: ComicMono Nerd Font" font_registered "ComicMono Nerd Font"
+check "font: Comic Code in ~/.local/share/fonts" test -f "$HOME/.local/share/fonts/Comic Code/Comic Code.otf"
 
-gtk_theme="$(gtk_setting gtk-theme-name)"
-icon_theme="$(gtk_setting gtk-icon-theme-name)"
-check "gtk theme installed: ${gtk_theme:-<unset>}" theme_installed "${gtk_theme:-__unset__}"
-check "icon theme installed: ${icon_theme:-<unset>}" icons_installed "${icon_theme:-__unset__}"
+check "icon theme installed: Papirus-Dark" icons_installed Papirus-Dark
 check "icon theme installed: Adwaita" icons_installed Adwaita
 
 echo

@@ -6,8 +6,8 @@
 VOID_PACKAGES=(
     # base / cli
     git curl zip unzip zsh neovim ripgrep zoxide htop bmon nethogs openssh file
-    # build tools (suckless, gtk theme). Void ships headers in separate -devel packages.
-    base-devel pkg-config meson sassc
+    # build tools (suckless). Void ships headers in separate -devel packages.
+    base-devel pkg-config
     libX11-devel libXft-devel libXinerama-devel libXrender-devel freetype-devel fontconfig-devel
     # session: Arch gets these from systemd
     dbus elogind xdg-utils xdg-desktop-portal-gtk
@@ -24,7 +24,7 @@ VOID_PACKAGES=(
     fcitx5 fcitx5-unikey fcitx5-gtk fcitx5-qt fcitx5-configtool
     # fonts
     fontconfig noto-fonts-cjk noto-fonts-emoji nerd-fonts-symbols-ttf
-    # gtk themes / icons (Arc-Dark is built by install_gtk_theme.sh)
+    # gtk themes / icons
     gnome-themes-extra adwaita-icon-theme papirus-icon-theme
     # lock screen (Arch: AUR) - right click on the user block in dwmblocks
     physlock i3lock-color betterlockscreen bc ImageMagick
@@ -33,6 +33,7 @@ VOID_PACKAGES=(
 # Removed before installing (old void-linux.sh installed PulseAudio).
 VOID_CONFLICTING_PACKAGES=(
     pulseaudio alsa-plugins-pulseaudio
+    i3lock          # conflicts with i3lock-color (needed by betterlockscreen)
 )
 
 # runit services to enable (Arch: systemd starts the equivalents by default).

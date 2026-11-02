@@ -1,5 +1,5 @@
 #!/bin/bash
-# One-shot setup: copy dotfiles into $HOME, install packages, build themes/fonts/suckless, validate.
+# One-shot setup: copy dotfiles into $HOME, install packages, fonts, suckless, validate.
 #
 # Usage: ./setup.sh [options]
 #   --dry-run         show what would be done, change nothing
@@ -79,11 +79,9 @@ else
 fi
 
 step "fonts"     "$SCRIPTS/after/install_fonts.sh"
-step "gtk theme" "$SCRIPTS/after/install_gtk_theme.sh"
 step "nvim"      "$SCRIPTS/after/install_nvim_config.sh"
 step "audio"     "$SCRIPTS/after/linux/setup_audio.sh"
 step "keyboard"  "$SCRIPTS/after/linux/setup_keyboard.sh"
-step "lockscreen" "$SCRIPTS/after/linux/setup_lockscreen.sh"
 step "suckless"  "$SCRIPTS/after/linux/install_suckless.sh"
 step "wallpaper" "$SCRIPTS/after/linux/setup_wallpaper.sh"
 

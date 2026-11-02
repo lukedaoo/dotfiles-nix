@@ -5,8 +5,8 @@
 PACMAN_PACKAGES=(
     # base / cli
     git curl zip unzip zsh neovim ripgrep zoxide htop bmon nethogs openssh file
-    # build tools (yay, suckless, gtk theme)
-    base-devel meson sassc
+    # build tools (yay, suckless)
+    base-devel
     # X window system
     xorg xorg-xinit xcompmgr xclip xfce4 lightdm lightdm-gtk-greeter
     # desktop apps / utils
@@ -19,7 +19,7 @@ PACMAN_PACKAGES=(
     fcitx5 fcitx5-unikey fcitx5-gtk
     # fonts
     fontconfig noto-fonts-cjk noto-fonts-emoji
-    # gtk themes / icons (Arc-Dark is built by install_gtk_theme.sh)
+    # gtk themes / icons
     gnome-themes-extra adwaita-icon-theme papirus-icon-theme
 )
 
@@ -27,6 +27,7 @@ PACMAN_PACKAGES=(
 # (pacman --noconfirm answers "no" to conflict prompts, so the install would fail otherwise.)
 CONFLICTING_PACKAGES=(
     pulseaudio pulseaudio-alsa pulseaudio-bluetooth   # replaced by pipewire-pulse / pipewire-alsa
+    i3lock                                            # replaced by i3lock-color (AUR, for betterlockscreen)
 )
 
 AUR_PACKAGES=(

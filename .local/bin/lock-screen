@@ -1,0 +1,20 @@
+#!/bin/sh
+# Lock the screen with betterlockscreen.
+# Its image cache can only be built inside a running X session, so build it here
+# on first use instead of during setup.sh (which usually runs before X starts).
+
+WALLPAPER_DIR="$HOME/.wallpaper"
+CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/betterlockscreen/current"
+
+if [ ! -f "$CACHE_DIR/lock_resize.png" ]; then
+    notify-send "Lock screen" "Building lock screen image, first time only..." 2>/dev/null
+    betterlockscreen -u "$WALLPAPER_DIR" > /dev/null 2>&1
+fi
+
+if [ -f "$CACHE_DIR/lock_resize.png" ]; then
+    exec betterlockscreen -l
+fi
+
+# No image (e.g. empty ~/.wallpaper): plain black lock instead of failing.
+notify-send -u critical "Lock screen" "No lock image, run: betterlockscreen -u ~/.wallpaper" 2>/dev/null
+exec i3lock -n -c 000000

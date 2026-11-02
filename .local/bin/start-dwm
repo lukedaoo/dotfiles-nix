@@ -40,11 +40,25 @@ fi
 export XDG_CURRENT_DESKTOP=XFCE     
 export QT_QPA_PLATFORMTHEME=gtk3
 
-/usr/lib/xdg-desktop-portal &
-/usr/lib/xdg-desktop-portal-gtk &
+# Audio: on systemd (Arch) PipeWire is socket activated; without systemd (Void) start it here.
+# wireplumber and pipewire-pulse are loaded by pipewire itself (see setup_audio.sh).
+if [ ! -d /run/systemd/system ] && command -v pipewire > /dev/null && ! pgrep -x -u "$USER" pipewire > /dev/null; then
+    pipewire &
+fi
 
-dbus-update-activation-environment --systemd --all
-systemctl --user import-environment DISPLAY XDG_CURRENT_DESKTOP
+# Arch keeps the portals in /usr/lib, Void in /usr/libexec.
+for portal in xdg-desktop-portal xdg-desktop-portal-gtk; do
+    for dir in /usr/lib /usr/libexec; do
+        if [ -x "$dir/$portal" ]; then "$dir/$portal" & break; fi
+    done
+done
+
+if [ -d /run/systemd/system ]; then
+    dbus-update-activation-environment --systemd --all
+    systemctl --user import-environment DISPLAY XDG_CURRENT_DESKTOP
+else
+    dbus-update-activation-environment --all
+fi
 
 #start session
 /usr/local/bin/dwm 
