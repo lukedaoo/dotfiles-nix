@@ -8,7 +8,7 @@ PACMAN_PACKAGES=(
     # build tools (yay, suckless)
     base-devel
     # X window system
-    xorg xorg-xinit xcompmgr xclip xfce4 lightdm lightdm-gtk-greeter
+    glew xorg xorg-xinit xcompmgr xclip xfce4 lightdm lightdm-gtk-greeter
     # desktop apps / utils
     kitty ghostty dmenu feh nsxiv ranger dunst libnotify arandr flameshot firefox brightnessctl
     # audio (PipeWire; pipewire-pulse keeps pactl/pavucontrol working)

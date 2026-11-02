@@ -31,7 +31,7 @@ esac
 for cmd in git zsh nvim kitty ghostty firefox flameshot brightnessctl betterlockscreen i3lock lock-screen dmenu feh dunst fcitx5 mpd mpc "${DISTRO_CMDS[@]}"; do
     check "command: $cmd" has_cmd "$cmd"
 done
-for cmd in dwm st slstatus dwmblocks; do
+for cmd in dwm st slstatus dwmblocks cboomer; do
     check "suckless: $cmd" has_cmd "$cmd"
 done
 

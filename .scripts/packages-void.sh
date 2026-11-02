@@ -12,7 +12,7 @@ VOID_PACKAGES=(
     # session: Arch gets these from systemd
     dbus elogind xdg-utils xdg-desktop-portal-gtk
     # X window system
-    xorg xinit xcompmgr xclip setxkbmap xset xrdb xfce4 lightdm lightdm-gtk-greeter
+    glew-devel xorg xinit xcompmgr xclip setxkbmap xset xrdb xfce4 lightdm lightdm-gtk-greeter
     # desktop apps / utils (no google-chrome in Void repos -> chromium)
     kitty ghostty dmenu feh nsxiv ranger dunst libnotify arandr flameshot firefox chromium brightnessctl
     Thunar thunar-archive-plugin tumbler
