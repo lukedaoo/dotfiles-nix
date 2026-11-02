@@ -1,44 +1,32 @@
 #!/bin/sh
-[ -r /sys/class/power_supply/BAT0/capacity ] || exit 0
 
-batstat=$(cat /sys/class/power_supply/BAT0/capacity) 
-batcharge=$(cat /sys/class/power_supply/BAT0/status) 
+LOW=15
+REPEAT=5
+STATE="${XDG_RUNTIME_DIR:-/tmp}/sb-battery-low"   # time of the last warning
 
-last_status="NONE" # NONE, OK, LOW
+bat=
+for d in /sys/class/power_supply/*; do
+    [ "$(cat "$d/type" 2>/dev/null)" = Battery ] && { bat=$d; break; }
+done
+[ -n "$bat" ] && [ -r "$bat/capacity" ] || exit 0
 
-if [ "$batcharge" = "Charging" ] || [ "$batcharge" = "Unknown" ]; 
-then
-    baticon=
-    last_status="OK"
-elif [[ $batstat -ge 90 ]]
-then
-    baticon=
-    last_status="OK"
-elif [[ $batstat -ge 50 ]]
-then
-    baticon=
-    last_status="OK"
-elif [[ $batstat -ge 30 ]]
-then
-    baticon=
-    last_status="OK"
-elif [[ $batstat -ge 15 ]]
-then
-    baticon=
+capacity=$(cat "$bat/capacity")
+status=$(cat "$bat/status")
+
+case $status in
+    "Not charging"|Unknown) status=Limiting ;;
+esac
+
+printf 'Bat: %s%% %s\n' "$capacity" "$status"
+
+if [ "$status" = Discharging ] && [ "$capacity" -lt "$LOW" ]; then
+    now=$(date +%s)
+    last=$(cat "$STATE" 2>/dev/null || echo 0)
+    if [ $((now - last)) -ge "$REPEAT" ]; then
+        notify-send -u critical -a battery -h string:x-dunst-stack-tag:battery-low \
+            "Battery low: $capacity%" "Plug in the charger"
+        echo "$now" > "$STATE"
+    fi
 else
-    baticon=
-    last_status="LOW"
+    rm -f "$STATE"
 fi
-
-if [ "$batcharge" = "Unknown" ]
-then
-    batcharge="Limiting"
-fi
-
-echo -e "$baticon $batstat% $batcharge"
-
-if [ "$last_status" = "LOW" ];
-then
-    notify-send "Battery low: $batstat%"
-fi
-
