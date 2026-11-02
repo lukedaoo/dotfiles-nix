@@ -4,7 +4,7 @@
 
 PACMAN_PACKAGES=(
     # base / cli
-    git curl zip unzip zsh neovim ripgrep zoxide htop bmon nethogs openssh file
+    git curl zip unzip zsh neovim ripgrep zoxide htop bmon nethogs openssh file trash-cli
     # build tools (yay, suckless)
     base-devel
     # X window system

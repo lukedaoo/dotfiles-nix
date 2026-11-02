@@ -28,7 +28,7 @@ case "$DISTRO" in
     void) DISTRO_CMDS=(chromium) ;;
     *)    DISTRO_CMDS=() ;;
 esac
-for cmd in git zsh nvim kitty ghostty firefox flameshot brightnessctl betterlockscreen i3lock lock-screen dmenu feh dunst fcitx5 mpd mpc "${DISTRO_CMDS[@]}"; do
+for cmd in git zsh nvim kitty ghostty firefox flameshot brightnessctl betterlockscreen i3lock lock-screen dmenu feh dunst fcitx5 mpd mpc trash-put "${DISTRO_CMDS[@]}"; do
     check "command: $cmd" has_cmd "$cmd"
 done
 for cmd in dwm st slstatus dwmblocks cboomer; do

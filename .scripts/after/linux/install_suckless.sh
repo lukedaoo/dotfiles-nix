@@ -1,6 +1,6 @@
 #!/bin/bash
 # Clone (if missing) and build/install dwm, st, slstatus, dwmblocks from lukedaoo/suckless,
-# plus cboomer (screen zoom, Super+z) from laserattack/cboomer.
+# plus cboomer (screen zoom, Super+z), vendored in the suckless repo (MIT, from laserattack/cboomer).
 # An existing ~/.config/suckless is never deleted, so local config.h edits are kept.
 set -uo pipefail
 
@@ -10,7 +10,6 @@ source "$SCRIPT_DIR/../../lib.sh"
 SUCKLESS_REPO="https://github.com/lukedaoo/suckless"
 SUCKLESS_DIR="$HOME/.config/suckless"
 SUCKLESS_SOFTWARE=(dwm st slstatus dwmblocks)
-CBOOMER_REPO="https://github.com/laserattack/cboomer"
 CBOOMER_DIR="$SUCKLESS_DIR/cboomer"
 
 if [[ -d "$SUCKLESS_DIR" && -n "$(ls -A "$SUCKLESS_DIR" 2>/dev/null)" ]]; then
@@ -39,13 +38,12 @@ for item in "${SUCKLESS_SOFTWARE[@]}"; do
     fi
 done
 
-# cboomer has no install target: clone if missing, build, copy to ~/.local/bin.
+# cboomer has no install target: build, copy to ~/.local/bin.
 log_step "Building cboomer"
-if [[ ! -f "$CBOOMER_DIR/Makefile" ]]; then
-    [[ -d "$CBOOMER_DIR" ]] && run rmdir "$CBOOMER_DIR" 2> /dev/null
-    run git clone "$CBOOMER_REPO" "$CBOOMER_DIR" || failed+=(cboomer)
-fi
-if [[ " ${failed[*]} " != *" cboomer "* ]]; then
+if [[ "$DRY_RUN" != "1" && ! -f "$CBOOMER_DIR/Makefile" ]]; then
+    log_warn "$CBOOMER_DIR has no Makefile, skipping"
+    failed+=(cboomer)
+else
     if run make -C "$CBOOMER_DIR" USE_XSHM=1 > /dev/null && run install -Dm755 "$CBOOMER_DIR/cboomer" "$HOME/.local/bin/cboomer"; then
         log_ok "cboomer installed"
     else

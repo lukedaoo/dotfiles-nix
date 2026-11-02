@@ -5,7 +5,7 @@
 
 VOID_PACKAGES=(
     # base / cli
-    git curl zip unzip zsh neovim ripgrep zoxide htop bmon nethogs openssh file
+    git curl zip unzip zsh neovim ripgrep zoxide htop bmon nethogs openssh file trash-cli
     # build tools (suckless). Void ships headers in separate -devel packages.
     base-devel pkg-config
     libX11-devel libXft-devel libXinerama-devel libXrender-devel freetype-devel fontconfig-devel
