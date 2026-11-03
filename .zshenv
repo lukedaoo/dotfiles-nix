@@ -8,4 +8,7 @@ if command -v google-chrome-stable > /dev/null; then export BROWSER="google-chro
 
 [ -f "$HOME/.env" ] && source "$HOME/.env"
 [ -f "$HOME/.secret" ] && source "$HOME/.secret"
+[ -f "$HOME/.headroom_profile" ] && source "$HOME/.headroom_profile"
+
 export TERM="xterm-256color"
+
