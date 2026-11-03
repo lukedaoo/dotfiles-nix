@@ -82,6 +82,12 @@ signing_key_on_github() {
     | awk '{print $1" "$2}' | grep -qxF "$local_key"
 }
 
+# A passphrase-protected key that is not loaded in ssh-agent would prompt, so
+# non-interactive checks (ssh -T in BatchMode, test signature) cannot use it.
+key_encrypted() { [ -f "$KEY" ] && ! ssh-keygen -y -P "" -f "$KEY" >/dev/null 2>&1; }
+key_in_agent() { ssh-add -L 2>/dev/null | grep -qF "$(awk '{print $2}' "$PUB" 2>/dev/null)"; }
+needs_prompt() { key_encrypted && ! key_in_agent; }
+
 gcfg() { git config --global --get "$1" 2>/dev/null; }
 
 set_cfg() { # set_cfg key value — only write when different
@@ -164,13 +170,21 @@ validate() {
   fi
   check "no gh HTTPS credential helper"      no_helper
   check "https://github.com/ rewritten to SSH" has_rewrite
-  check "ssh -T git@github.com authenticates" ssh_auth
+  if needs_prompt; then
+    log_warn "skipped ssh -T check: key has a passphrase (it would prompt). Try: ssh -T git@github.com"
+  else
+    check "ssh -T git@github.com authenticates" ssh_auth
+  fi
   check "gpg.format = ssh"                   sign_format
   check "user.signingkey = $PUB"             sign_key
   check "commit.gpgsign = true"              sign_commits
   check "tag.gpgsign = true"                 sign_tags
   check "allowed_signers file configured"    signers_ok
-  check "test signature creates and verifies" sign_works
+  if needs_prompt; then
+    log_warn "skipped test signature: key has a passphrase (it would prompt). Try: git commit --allow-empty -m test"
+  else
+    check "test signature creates and verifies" sign_works
+  fi
 
   echo
   if [ "$fail" -eq 0 ]; then log_ok "All checks passed."; else log_error "Some checks failed."; fi

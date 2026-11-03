@@ -7,6 +7,7 @@
 #   --skip-packages   pass to setup.sh (no pacman/yay/xbps)
 #   --skip-ssh        do not run setup-ssh-git.sh
 #   --skip-dev        do not run setup-dev.sh
+#   --no-passphrase   generate the SSH key without a passphrase (default: ask for one)
 #   --validate-only   only run every validation (nothing is installed or changed)
 #   -h, --help        show this help
 set -uo pipefail
@@ -17,15 +18,16 @@ SCRIPTS="$REPO_DIR/.scripts"
 [[ -f "$SCRIPTS/lib.sh" ]] || { echo "Cannot find $SCRIPTS/lib.sh, run all.sh from the dotfiles repo" >&2; exit 1; }
 source "$SCRIPTS/lib.sh"
 
-DRY=0; SKIP_PACKAGES=0; SKIP_SSH=0; SKIP_DEV=0; VALIDATE_ONLY=0
+DRY=0; SKIP_PACKAGES=0; SKIP_SSH=0; SKIP_DEV=0; VALIDATE_ONLY=0; PASSPHRASE=1
 for arg in "$@"; do
     case "$arg" in
         --dry-run)        DRY=1 ;;
         --skip-packages)  SKIP_PACKAGES=1 ;;
         --skip-ssh)       SKIP_SSH=1 ;;
         --skip-dev)       SKIP_DEV=1 ;;
+        --no-passphrase)  PASSPHRASE=0 ;;
         --validate-only)  VALIDATE_ONLY=1 ;;
-        -h|--help)        sed -n '2,11p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
+        -h|--help)        sed -n '2,12p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
         *)                die "Unknown option: $arg (see --help)" ;;
     esac
 done
@@ -75,7 +77,10 @@ else
         fi
     fi
     if gh auth status > /dev/null 2>&1; then
-        run_script "setup-ssh-git.sh" "$REPO_DIR/setup-ssh-git.sh" $( (( DRY )) && echo --dry-run )
+        ssh_args=()
+        (( DRY ))        && ssh_args+=(--dry-run)
+        (( PASSPHRASE )) && ssh_args+=(--passphrase)   # only used if a new key is generated
+        run_script "setup-ssh-git.sh" "$REPO_DIR/setup-ssh-git.sh" "${ssh_args[@]}"
     elif (( DRY )); then
         log_warn "Dry run: skipping setup-ssh-git.sh because gh is not logged in"
     else

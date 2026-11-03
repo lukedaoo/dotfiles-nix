@@ -44,8 +44,12 @@ Files are checked out in place, so `~/setup.sh` is the script and `config commit
    ./setup.sh
    ```
 
-   Run as your user, not root. It asks for the sudo password. `all.sh` also stops once for the interactive
-   `gh auth login` (browser or device code); see [all.sh](#allsh-everything-at-once).
+   Run as your user, not root. It asks for the sudo password. `all.sh` also pauses twice for you:
+   1. `gh auth login` (browser or device code), unless `gh` is already logged in.
+   2. Choosing a passphrase for the new SSH key (type it twice). Remember it: it cannot be recovered. Use
+      `./all.sh --no-passphrase` to skip this.
+
+   See [all.sh](#allsh-everything-at-once).
 4. Log out and back in to start dwm.
 5. If you used `setup.sh` only, the optional parts (opt-in; `setup.sh` never runs them):
    - [GitHub SSH + commit signing](#optional-github-ssh--commit-signing): `./setup-ssh-git.sh`
@@ -94,7 +98,7 @@ Runs `setup.sh`, then `setup-ssh-git.sh`, then `setup-dev.sh`. Each script still
 ./all.sh --validate-only   # run every validation, change nothing
 ```
 
-Options: `--skip-packages` (passed to `setup.sh`), `--skip-ssh`, `--skip-dev`.
+Options: `--skip-packages` (passed to `setup.sh`), `--skip-ssh`, `--skip-dev`, `--no-passphrase`.
 
 - If `setup.sh` fails it stops, because the other steps need its packages. A failure in the SSH or dev step does
   not stop the rest; the failures are listed at the end and the exit code is 1.
@@ -117,7 +121,8 @@ It does the following. It is safe to run again:
 
 1. Sets `user.name` to `ld-<hostname>` and `user.email` to your GitHub noreply address
    (`<id>+<login>@users.noreply.github.com`, looked up through `gh`).
-2. Generates `~/.ssh/id_ed25519` if missing. There is no passphrase, so nothing prompts later.
+2. Generates `~/.ssh/id_ed25519` if missing. Run on its own, the script makes a key with no passphrase unless you
+   pass `--passphrase` (`all.sh` passes it for you). See [Passphrase](#passphrase). An existing key is never touched.
 3. Trusts the github.com host key.
 4. Uploads the key to your GitHub account twice: once to log in, once to sign commits.
    If your `gh` token lacks the scopes, it runs `gh auth refresh` first.
@@ -126,7 +131,62 @@ It does the following. It is safe to run again:
 6. Turns on SSH signing for commits and tags, and adds your key to `~/.ssh/allowed_signers`
    so `git log --show-signature` works.
 
-Options: `--name NAME`, `--email EMAIL`, `--key PATH`, `--passphrase`.
+Options: `--name NAME`, `--email EMAIL`, `--key PATH`, `--passphrase` (ask for a key passphrase when generating).
+
+### Passphrase
+
+With a passphrase, git asks for it each time it signs a commit and each time it connects to GitHub, so a
+commit plus a push means two prompts. Nothing is cached unless you add the key to `ssh-agent`.
+Without a passphrase nothing prompts, but anyone who copies `~/.ssh/id_ed25519` can push and sign as you.
+
+- New machine: `./setup-ssh-git.sh --passphrase` (needs a terminal).
+- Existing key: `ssh-keygen -p -f ~/.ssh/id_ed25519`. The passphrase cannot be recovered; if you forget it,
+  delete the key and run the script again.
+- Cache it for a session instead of typing it every time: `ssh-add ~/.ssh/id_ed25519`.
+- Prompts appear in the terminal running git. Git run from a GUI or editor without a terminal cannot ask,
+  and fails unless an `ssh-askpass` program is installed.
+- `--validate` skips its `ssh -T` and test-signature checks when the key has a passphrase and is not in
+  `ssh-agent`, because they would prompt. Test by hand: `ssh -T git@github.com` and
+  `git commit --allow-empty -m test`.
+- `all.sh` passes `--passphrase` for you, so it asks for the passphrase when it generates a new key (an existing
+  key is left alone). Use `./all.sh --no-passphrase` to skip that.
+
+### By hand
+
+The same thing without the script. Every command can be pasted as is: `$EMAIL` is looked up from your
+GitHub account (the noreply address, also shown at <https://github.com/settings/emails>).
+
+```sh
+# 0. Log in to GitHub and look up your noreply email.
+gh auth login
+EMAIL=$(gh api user --jq '"\(.id)+\(.login)@users.noreply.github.com"')
+echo "$EMAIL"   # e.g. 45717015+lukedaoo@users.noreply.github.com
+
+# 1. Key. ssh-keygen asks for a passphrase; press Enter twice for none.
+ssh-keygen -t ed25519 -C "$EMAIL"
+ssh-keyscan -t ed25519 github.com >> ~/.ssh/known_hosts
+
+# 2. Upload it to GitHub, once for login and once for signing.
+gh auth refresh -h github.com -s admin:public_key,write:ssh_signing_key
+gh ssh-key add ~/.ssh/id_ed25519.pub --title "$(uname -n)"
+gh ssh-key add ~/.ssh/id_ed25519.pub --type signing --title "$(uname -n)-signing"
+
+# 3. Identity, SSH instead of HTTPS, and signing.
+git config --global user.name "ld-$(uname -n)"
+git config --global user.email "$EMAIL"
+git config --global url."git@github.com:".insteadOf "https://github.com/"
+git config --global gpg.format ssh
+git config --global user.signingkey ~/.ssh/id_ed25519.pub
+git config --global commit.gpgsign true
+git config --global tag.gpgsign true
+
+# 4. Let git verify your own signatures locally.
+echo "$EMAIL namespaces=\"git\" $(cut -d' ' -f1,2 ~/.ssh/id_ed25519.pub)" \
+  >> ~/.ssh/allowed_signers
+git config --global gpg.ssh.allowedSignersFile ~/.ssh/allowed_signers
+```
+
+Then check with `ssh -T git@github.com` and `./setup-ssh-git.sh --validate`.
 
 Also turn on "Keep my email addresses private" and "Block command line pushes that expose my email"
 at <https://github.com/settings/emails>. The script cannot change those.
