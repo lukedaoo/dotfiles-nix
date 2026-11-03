@@ -12,7 +12,7 @@ PACMAN_PACKAGES=(
     # X window system
     glew xorg xorg-xinit xcompmgr xclip xfce4 lightdm lightdm-gtk-greeter
     # desktop apps / utils
-    kitty ghostty dmenu feh nsxiv ranger dunst libnotify arandr flameshot firefox brightnessctl
+    kitty ghostty dmenu feh nsxiv ranger dunst libnotify arandr flameshot firefox brightnessctl mpv
     # audio (PipeWire; pipewire-pulse keeps pactl/pavucontrol working)
     alsa-utils pipewire pipewire-pulse pipewire-alsa wireplumber pavucontrol mpd mpc             # mpd + mpc: music in the bar, media keys, pomodoro
     # bluetooth / network
