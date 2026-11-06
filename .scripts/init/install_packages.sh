@@ -9,6 +9,9 @@ source "$SCRIPT_DIR/../lib.sh"
 
 # ---------------------------------------------------------------- Arch
 
+# TEMP: repo builds need OpenSSL 4, core still ships 3. Remove once core catches up.
+readonly OPENSSL4_HELD="typst,mariadb-libs,mysql-workbench,virtualbox"
+
 # Valid if it is a repo package or a package group.
 pacman_name_valid() { pacman -Si "$1" > /dev/null 2>&1 || pacman -Sg "$1" > /dev/null 2>&1; }
 
@@ -27,6 +30,7 @@ arch_install_repo() {
     log_step "Validating ${#PACMAN_PACKAGES[@]} pacman packages"
     local valid=() invalid=()
     for pkg in "${PACMAN_PACKAGES[@]}"; do
+        [[ ",$OPENSSL4_HELD," == *",$pkg,"* ]] && continue
         if pacman_name_valid "$pkg"; then valid+=("$pkg"); else invalid+=("$pkg"); fi
     done
     if (( ${#invalid[@]} )); then
@@ -35,7 +39,7 @@ arch_install_repo() {
 
     log_step "Installing pacman packages (full system upgrade, --needed skips installed ones)"
     # -Syu instead of -S: installing on top of a fresh -Sy without upgrading is a partial upgrade.
-    run sudo pacman -Syu --needed --noconfirm "${valid[@]}" || die "pacman install failed"
+    run sudo pacman -Syu --needed --noconfirm --ignore "$OPENSSL4_HELD" "${valid[@]}" || die "pacman install failed"
 }
 
 arch_install_yay() {

@@ -12,6 +12,7 @@ DEV_PACKAGES_ARCH=(
     go
     tree-sitter-cli                  # nvim-treesitter parser builds
     docker docker-compose docker-buildx
+    postgresql
     code                             # VS Code, open-source build (extensions from Open VSX)
 )
 
@@ -23,6 +24,7 @@ DEV_PACKAGES_VOID=(
     go
     tree-sitter tree-sitter-cli
     docker docker-compose docker-buildx
+    postgresql
     vscode                           # VS Code, open-source build (binary: code-oss)
 )
 

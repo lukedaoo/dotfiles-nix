@@ -58,6 +58,15 @@ docker_not_at_boot() {
 check "docker not started at boot" docker_not_at_boot
 check "user in docker group (re-login after first install)" in_docker_group
 
+check_version "postgresql"      postgres --version
+postgres_not_at_boot() {
+    case "$(detect_distro)" in
+        arch) ! service_enabled postgresql.service ;;
+        void) [[ -f /etc/sv/postgresql/down ]] || [[ ! -L /var/service/postgresql ]] ;;
+    esac
+}
+check "postgresql not started at boot" postgres_not_at_boot
+
 check_version "gdb"             gdb --version
 check         "gf2 (~/.local/bin/gf2)" test -x "$HOME/.local/bin/gf2"
 case "$(detect_distro)" in

@@ -1,5 +1,5 @@
 #!/bin/bash
-# Install dev tools: Java + Maven (sdkman), Node (nvm), Miniconda, Docker, gf2, CLion (Arch),
+# Install dev tools: Java + Maven (sdkman), Node (nvm), Miniconda, Docker, PostgreSQL, gf2, CLion (Arch),
 # VS Code, Rust (rustup), Go, tree-sitter CLI. Works on Arch and Void. Run after setup.sh.
 #
 # Usage: ./setup-dev.sh [options]
@@ -81,6 +81,7 @@ step "sdkman"    "$DEV/install_sdkman.sh"
 step "nvm"       "$DEV/install_nvm.sh"
 step "miniconda" "$DEV/install_miniconda.sh"
 step "docker"    "$DEV/install_docker.sh"
+step "postgres"  "$DEV/install_postgres.sh"
 step "gf2"       "$DEV/install_gf2.sh"
 step "clion"     "$DEV/install_clion.sh"
 step "vscode"    "$DEV/install_vscode.sh"
