@@ -44,3 +44,5 @@ Rule 7: Use the body to explain what and why vs. how. Assume the code explains t
 - If the prompt indicates that a bug is being fixed, don't write the fix right away. First write the test. Observe it failing. Then write the fix. And observe the test passing.        
 
 - Use `rg` instead of `grep` for searching.
+
+- Name variables so they explain themselves: concise, clear, self-explanatory. Long is fine, keep it short when possible. Name the role, not the type (`pending_events`, not `n`). No one-letter names except a loop index. Put the unit in the name when the type does not carry it (`time_ns`, `scratch_cap`). Two things of the same kind get names that tell them apart.
