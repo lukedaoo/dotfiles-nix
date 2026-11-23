@@ -29,7 +29,7 @@ alias lib='cd ~/.runtime-lib'
 
 alias ls='ls -G'        
 alias la='ls -AF'       
-alias ll='ls -al -h --block-size=M'
+alias ll='ls -al -h'
 alias l1='ls -1 -h --block-size=M'
 
 alias shutdown='shutdown -h now'
