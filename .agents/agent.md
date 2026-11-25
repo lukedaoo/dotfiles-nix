@@ -12,7 +12,7 @@
 
 - Use enums instead of booleans for function parameters.
 
-- Let the reader of the code breathe. Add empty lines between logical blocks of code. Do not write comments when the code is obvious. Comment only non-obvious *why*, and only on request otherwise. Propose ASCII drawings to explain complete systems.
+- Let the reader of the code breathe. Add empty lines between logical blocks of code. Do not write comments when the code is obvious. Comment only non-obvious _why_, and only on request otherwise. Propose ASCII drawings to explain complete systems.
 
 - Treat member visibility changes as a breaking design shift. Keep all fields and functions private unless external access is strictly required by the design. Prompt the user for explicit approval before changing any access modifier from private to internal or public.
 
@@ -24,6 +24,8 @@
 
 - Before changing code, find its existing tests and read them to learn the current behavior. Run them first for a baseline. If there are none, characterize the behavior (read callers, run it) before editing. Report any behavior the tests do not cover.
 
+- Test files stay under 300 lines. Prefer many small files, one behavior area each, so the file reads as a spec. Each test names the action and the expected result (`test_<action>_<expected>`), and its body shows the same: arrange, act, assert. One behavior per test.
+
 - Strictly adhere to the layered boundary hierarchy: each layer may only communicate with its immediate neighbor directly below it. Never "punch holes" through layers (e.g., controllers or UI components must never directly call database queries, raw hardware drivers, or low-level network clients; always route through the intermediate service/abstraction layer).
 
 - Always use {}, even on a one-line "if" statement.
@@ -33,15 +35,14 @@ Rule 1: Separate the subject line from the body with a single blank line.
 Rule 2: Limit the subject line to 50 characters (72 is the absolute hard limit).
 Rule 3: Capitalize the first letter of the subject line.
 Rule 4: Do not end the subject line with a period.
-Rule 5: Use the imperative mood in the subject line (e.g., "Fix bug," "Add feature," 
-        not "Fixed" or "Adds"). Test formula: It must complete the sentence: "If applied,
-        this commit will [your subject line here]".
+Rule 5: Use the imperative mood in the subject line (e.g., "Fix bug," "Add feature,"
+not "Fixed" or "Adds"). Test formula: It must complete the sentence: "If applied,
+this commit will [your subject line here]".
 Rule 6: Wrap the body text manually at 72 characters to prevent Git formatting issues.
 Rule 7: Use the body to explain what and why vs. how. Assume the code explains the how;
-        the message must explain the context and reasoning. 
+the message must explain the context and reasoning.
 
-
-- If the prompt indicates that a bug is being fixed, don't write the fix right away. First write the test. Observe it failing. Then write the fix. And observe the test passing.        
+- If the prompt indicates that a bug is being fixed, don't write the fix right away. First write the test. Observe it failing. Then write the fix. And observe the test passing.
 
 - Use `rg` instead of `grep` for searching.
 
